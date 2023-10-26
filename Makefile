@@ -36,11 +36,11 @@ dirs:
 	mkdir -p bin
 
 clean:
-	rm -f $(BIN_DIR)/*.o
-	rm -f $(BIN_DIR)/*.iso
-	rm -f $(BIN_DIR)/*.elf
-	rm -f $(BIN_DIR)/*.bin
-	rm -f $(BIN_DIR)/$(TARGET)
+	rm -f *.o
+	rm -f *.iso
+	rm -f *.elf
+	rm -f *.bin
+	rm -f $(TARGET)
 	rmdir $(BIN_DIR)
 
 .PHONY: all clean
