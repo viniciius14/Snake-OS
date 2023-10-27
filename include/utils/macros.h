@@ -3,6 +3,6 @@
 
 #define PACKED __attribute__((packed))
 
-#define NULL ((void*)0)
+#define NULL 0
 
 #endif MACROS_H

@@ -1,5 +1,4 @@
-#include "types.h"
-#include "memory.h"
+#include "mem_ops.h"
 
 /* Sets n bytes of memory to value starting at address dst */
 static inline void memset(void *dst, uint8_t value, size_t n) {
@@ -19,8 +18,8 @@ static inline void *memcpy(void *dst, const void *src, size_t n) {
     }
 }
 
-/**/
-static inline void  *memmove(void *dst, const void *src, size_t n) {
+/* Moves n bytes from src to dst */
+static inline void *memmove(void *dst, const void *src, size_t n) {
     if(src > dst) {
         return memcpy(dst, src, n);
     }

@@ -17,4 +17,11 @@ typedef uint64_t            size_t;
 
 typedef uint8_t             bool;
 
+#define bool uint8_t
+#define true 1
+#define false 0
+
+#define SUCCESS 1
+#define FAIL 0
+
 #endif
