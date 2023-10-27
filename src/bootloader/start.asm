@@ -1,7 +1,13 @@
+[org 0x7c00]
+section .rodata       ; read only data section
+
+KERNEL_LOCATION equ 0x1000
+CODE_SEG        equ code_descriptor - GDT_Start
+DATA_SEG        equ data_descriptor - GDT_Start
+
+section .text       ; text section (i.e. code)
+    global _start   ; declare _start as a global symbol
 _start:
-
-    KERNEL_LOCATION equ 0x1000
-
     mov [BOOT_DISK], dl
 
     xor ax, ax
@@ -19,15 +25,12 @@ _start:
     mov dh, 0x00
     mov cl, 0x02
     mov dl, [BOOT_DISK]
-    int 0x13
-
+    int 0x13                ; no error management, do your homework!
 
     mov ah, 0x0
     mov al, 0x3
     int 0x10                ; text mode
 
-    CODE_SEG equ code_descriptor - GDT_Start
-    DATA_SEG equ data_descriptor - GDT_Start
 
     cli                     ; disable all interrupts
     lgdt [GDT_Descriptor]   ; load GDT
@@ -66,6 +69,7 @@ GDT_Descriptor:
     dw GDT_End - GDT_Start - 1  ; size
     dd GDT_Start                ; start
 
+
 [bits 32]
 start_protected_mode:
     mov ax, DATA_SEG
@@ -75,13 +79,10 @@ start_protected_mode:
 	mov fs, ax
 	mov gs, ax
 
-	mov ebp, 0x90000    ; 32 bit stack base pointer
+	mov ebp, 0x90000		; 32 bit stack base pointer
 	mov esp, ebp
 
     jmp KERNEL_LOCATION
 
-
-
-
 times 510-($-$$) db 0
-db 0xaa55
+db 0x55, 0xaa

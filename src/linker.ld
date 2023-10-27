@@ -1,11 +1,28 @@
 OUTPUT_FORMAT("binary")
-ENTRY(_start)   /* Entry point symbol in your code */
+ENTRY(_start)
 SECTIONS
 {
-    . = 0x7c00; /* Set the starting address to 0x1000 */
-    .text :
+    . = 0x1000;    /* set starting address */
+
+    .text BLOCK(4K) : ALIGN(4K)
     {
         *(.text)
     }
-    /* Other sections like .data, .bss, etc. can be defined here */
+
+    .rodata BLOCK(4K) : ALIGN(4K)
+    {
+        *(.rodata)
+    }
+
+    .data BLOCK(4K) : ALIGN(4K)
+    {
+        *(.data)
+    }
+
+    .bss BLOCK(4K) : ALIGN(4K)
+    {
+        *(.bss)
+    }
+
+    end = .;
 }
