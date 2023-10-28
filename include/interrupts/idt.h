@@ -2,6 +2,7 @@
 #define IDT_H
 
 #include "types.h"
+#include "macros.h"
 
 /* IDT Descriptor Format */
 struct IDT_Descriptor {

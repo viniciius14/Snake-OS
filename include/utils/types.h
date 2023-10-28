@@ -17,6 +17,8 @@ typedef uint64_t            size_t;
 
 typedef uint8_t             bool;
 
+typedef uint8_t             color;
+
 #define bool uint8_t
 #define true 1
 #define false 0

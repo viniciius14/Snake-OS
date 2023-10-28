@@ -5,4 +5,4 @@
 
 #define NULL 0
 
-#endif MACROS_H
+#endif /* MACROS_H */
