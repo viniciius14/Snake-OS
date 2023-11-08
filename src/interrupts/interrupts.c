@@ -1,40 +1,48 @@
 #include "types.h"
 #include "interrupts.h"
-#include "panic.h"
+#include "idt.h"
+
+void interrupts(bool opt) {
+    if(opt) {
+        asm("sti");
+    } else {
+        asm("cli");
+    }
+}
 
 /* Add all Exception Interrupts */
-void LoadExceptions() {
-	AddInt(0, int00, 0);
-    AddInt(1, int01, 0);
-    AddInt(2, int02, 0);
-    AddInt(3, int03, 0);
-    AddInt(4, int04, 0);
-    AddInt(5, int05, 0);
-    AddInt(6, int06, 0);
-    AddInt(7, int07, 0);
-    AddInt(8, int08, 0);
-    AddInt(9, int09, 0);
-    AddInt(10, int10, 0);
-    AddInt(11, int11, 0);
-    AddInt(12, int12, 0);
-    AddInt(13, int13, 0);
-    AddInt(14, int14, 0);
-    AddInt(16, int16, 0);
-    AddInt(17, int17, 0);
-    AddInt(18, int18, 0);
-    AddInt(19, int19, 0);
-	AddInt(20, 0, 0);       /* Intel reserved interrupts from 20 - 31 */
-	AddInt(21, 0, 0);
-	AddInt(22, 0, 0);
-	AddInt(23, 0, 0);
-	AddInt(24, 0, 0);
-	AddInt(25, 0, 0);
-	AddInt(26, 0, 0);
-	AddInt(27, 0, 0);
-	AddInt(28, 0, 0);
-	AddInt(29, 0, 0);
-	AddInt(30, 0, 0);
-	AddInt(31, 0, 0);
+void load_exceptions() {
+	add_int(0, int00, 0);
+    add_int(1, int01, 0);
+    add_int(2, int02, 0);
+    add_int(3, int03, 0);
+    add_int(4, int04, 0);
+    add_int(5, int05, 0);
+    add_int(6, int06, 0);
+    add_int(7, int07, 0);
+    add_int(8, int08, 0);
+    add_int(9, int09, 0);
+    add_int(10, int10, 0);
+    add_int(11, int11, 0);
+    add_int(12, int12, 0);
+    add_int(13, int13, 0);
+    add_int(14, int14, 0);
+    add_int(16, int16, 0);
+    add_int(17, int17, 0);
+    add_int(18, int18, 0);
+    add_int(19, int19, 0);
+	add_int(20, 0, 0);       /* Intel reserved interrupts from 20 - 31 */
+	add_int(21, 0, 0);
+	add_int(22, 0, 0);
+	add_int(23, 0, 0);
+	add_int(24, 0, 0);
+	add_int(25, 0, 0);
+	add_int(26, 0, 0);
+	add_int(27, 0, 0);
+	add_int(28, 0, 0);
+	add_int(29, 0, 0);
+	add_int(30, 0, 0);
+	add_int(31, 0, 0);
 }
 
 /* Exception handlers */
@@ -132,3 +140,5 @@ void int_19(void)
 {
 	panic("SIMD Floating-Point","#XF", false);
 }
+
+

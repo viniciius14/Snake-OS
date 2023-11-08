@@ -5,4 +5,6 @@
 
 #define NULL 0
 
+#define CAT(x, y) x##y
+
 #endif /* MACROS_H */

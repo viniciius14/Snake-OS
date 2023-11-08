@@ -1,8 +1,11 @@
+#include "types.h"
+
 #ifndef INTERRUTPS_H
 #define INTERRUPTS_H
 
-/* These are all assembly functions in interrupts.asm */
+void load_exceptions();
 
+/* These are all assembly functions in interrupts.asm */
 extern void int00(void);
 extern void int01(void);
 extern void int02(void);
@@ -24,5 +27,8 @@ extern void int17(void);
 extern void int18(void);
 extern void int19(void);
 extern void int32(void);
+
+/* enables/disables software interrupts */
+void interrupts(bool opt);
 
 #endif /* INTERRUPTS_H */

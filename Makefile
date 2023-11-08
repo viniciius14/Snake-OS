@@ -36,10 +36,10 @@ dirs:
 	mkdir -p bin
 
 clean:
-	rm -f *.o
-	rm -f *.iso
-	rm -f *.elf
-	rm -f *.bin
+	rm -rf *.o
+	rm -rf *.iso
+	rm -rf *.elf
+	rm -rf *.bin
 	rm -f $(TARGET)
 	rmdir $(BIN_DIR)
 
