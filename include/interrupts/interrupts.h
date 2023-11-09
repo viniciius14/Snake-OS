@@ -23,7 +23,7 @@ struct IDT_Pointer {
 void interrupts_init(void);
 
 void load_IDT(void);
-void add_int(int number, void(*handler_f)(), uint32_t dpl);
+void add_int(int number, void(*handler_f)());
 
 void load_exceptions(void);
 

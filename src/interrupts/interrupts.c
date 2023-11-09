@@ -18,9 +18,6 @@ void interrupts_init(void) {
     /* Here we load all the interrupts and "connect" them to their handler function */
     load_exceptions();
 
-    /* Add a customized interrupt */
-    // AddInt(48, int32, 0);
-
 	/* Point the IDT register to our IDT array */
     load_IDT();
 
@@ -39,8 +36,8 @@ void load_IDT(void) {
     asm volatile("lidt (%0) ": :"p" (idt));
 }
 
-/* set descriptor number'th elements settings' to dpl and to be handled by handler_f */
-void add_int(int number, void(*handler_f)(), uint32_t dpl) {
+/* set descriptor number'th element settings' to be handled by handler_f */
+void add_int(int number, void(*handler_f)()) {
     uint16_t selector = 0x08;
     uint16_t settings = 0;
     uint32_t offset = (uintptr_t)handler_f;
@@ -48,14 +45,8 @@ void add_int(int number, void(*handler_f)(), uint32_t dpl) {
     /* get CS selector */
     asm volatile("movw %%cs,%0" :"=g"(selector));
 
-    switch(dpl) {
-        case 0:
-            settings = 0x8E00;  /* 1000111000000000 = present, ring0, int_gate */
-            break;
-        default:
-            settings = 0xEE00;  /* 1110111000000000 = present, ring3, int_gate */
-            break;
-    }
+
+    settings = 0x8E00;  /* 1000111000000000 = present, ring0, int_gate */
 
     idt_list[number].offset_low     = (offset & 0xFFFF);
     idt_list[number].selector       = selector;
@@ -74,37 +65,37 @@ void interrupts(bool opt) {
 
 /* Add all Exception Interrupts */
 void load_exceptions(void) {
-	add_int(0,  int00, 0);
-    add_int(1,  int01, 0);
-    add_int(2,  int02, 0);
-    add_int(3,  int03, 0);
-    add_int(4,  int04, 0);
-    add_int(5,  int05, 0);
-    add_int(6,  int06, 0);
-    add_int(7,  int07, 0);
-    add_int(8,  int08, 0);
-    add_int(9,  int09, 0);
-    add_int(10, int10, 0);
-    add_int(11, int11, 0);
-    add_int(12, int12, 0);
-    add_int(13, int13, 0);
-    add_int(14, int14, 0);
-    add_int(16, int16, 0);
-    add_int(17, int17, 0);
-    add_int(18, int18, 0);
-    add_int(19, int19, 0);
-	add_int(20, 0,     0);       /* Intel reserved interrupts from 20 - 31 */
-	add_int(21, 0,     0);
-	add_int(22, 0,     0);
-	add_int(23, 0,     0);
-	add_int(24, 0,     0);
-	add_int(25, 0,     0);
-	add_int(26, 0,     0);
-	add_int(27, 0,     0);
-	add_int(28, 0,     0);
-	add_int(29, 0,     0);
-	add_int(30, 0,     0);
-	add_int(31, 0,     0);
+	add_int(0,  int00);
+    add_int(1,  int01);
+    add_int(2,  int02);
+    add_int(3,  int03);
+    add_int(4,  int04);
+    add_int(5,  int05);
+    add_int(6,  int06);
+    add_int(7,  int07);
+    add_int(8,  int08);
+    add_int(9,  int09);
+    add_int(10, int10);
+    add_int(11, int11);
+    add_int(12, int12);
+    add_int(13, int13);
+    add_int(14, int14);
+    add_int(16, int16);
+    add_int(17, int17);
+    add_int(18, int18);
+    add_int(19, int19);
+	add_int(20, 0);       /* Intel reserved interrupts from 20 - 31 */
+	add_int(21, 0);
+	add_int(22, 0);
+	add_int(23, 0);
+	add_int(24, 0);
+	add_int(25, 0);
+	add_int(26, 0);
+	add_int(27, 0);
+	add_int(28, 0);
+	add_int(29, 0);
+	add_int(30, 0);
+	add_int(31, 0);
 }
 
 /* Exception handlers */

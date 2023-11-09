@@ -1,6 +1,6 @@
 #include "interrupts.h"
+#include "fpu.h"
 #include "kernel_ops.h"
-#include "interrupts.h"
 
 void kernel_main(void) {
     // char* video_memory = (char*)0xb8000;
@@ -10,8 +10,11 @@ void kernel_main(void) {
 
     interrupts_init();
     fpu_init();
+    screen_init();
 
-    k_panic("Oh no.", "lalala", true);
+
+
+    // k_panic("Oh no.", "lalala", true);
 
     for (;;) {}
 

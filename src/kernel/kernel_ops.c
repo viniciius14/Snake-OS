@@ -32,6 +32,8 @@ void k_panic(const char *message, const char* code, bool halt) {
 
 void k_print(const char *msg, color text_color) {
     char* video_memory = (char*)0xb8000;
+
+    /* The screen is 80 characters wide */
     uint8_t i = curr_line * 80 * 2;
 
     while(*msg != 0){
