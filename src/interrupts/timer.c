@@ -21,6 +21,6 @@ void init_timer(uint32_t freq) {
 }
 
 
-static void timer_callback(register regs) {
+static void timer_callback(void) {
     tick++;
 }

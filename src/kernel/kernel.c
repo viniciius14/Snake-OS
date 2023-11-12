@@ -10,7 +10,7 @@ void kernel_main(void) {
 
     interrupts_init();
     fpu_init();
-    screen_init();
+    //screen_init();
 
 
 

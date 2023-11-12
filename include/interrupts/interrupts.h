@@ -2,7 +2,6 @@
 #define INTERRUPTS_H
 
 #include "utils/types.h"
-#include "utils/types.h"
 #include "utils/macros.h"
 
 /* IDT Descriptor Format */
@@ -30,7 +29,7 @@ void load_exceptions(void);
 /* enables/disables software interrupts */
 void interrupts(bool opt);
 
-/* These are all assembly functions in interrupts.asm */
+/* These are all assembly functions in interrupts.__asm__ __volatile__ */
 extern void int00(void);
 extern void int01(void);
 extern void int02(void);

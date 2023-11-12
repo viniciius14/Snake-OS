@@ -19,36 +19,22 @@ void trace_leave() {
 }
 
 void context_dump() {
-    uint32_t eax, ebx, ecx, edx, esi, edi, ebp, esp, eip;
+    uint32_t eax, ebx, ecx, edx, esp;
 
-    asm volatile(
-        "pusha\n\t"
-        "call 1f\n" // Call the next instruction, which pushes EIP onto the stack
-        "1: popl %0\n" // Get EIP value
-        "movl %%esp, %1\n" // Get ESP value
-        "popa\n\t"
-        : "=m"(eip), "=m"(esp), "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx),
-          "=S"(esi), "=D"(edi), "=b"(ebp)
+    __asm__ __volatile__ (
+        "movl %%eax, %0\n\t"
+        "movl %%ebx, %1\n\t"
+        "movl %%ecx, %2\n\t"
+        "movl %%edx, %3\n\t"
+        "movl %%esp, %4\n\t"
+        : "=r" (eax), "=r" (ebx), "=r" (ecx), "=r" (edx), "=r" (esp)
     );
 
     k_print("------ CONTEXT DUMP ------", WHITE_TXT);
-    k_printf("EAX: ", WHITE_TXT);
-    k_print_var(eax);
-    k_printf("EBX: ", WHITE_TXT);
-    k_print_var(ebx);
-    k_printf("ECX: ", WHITE_TXT);
-    k_print_var(ecx);
-    k_printf("EDX: ", WHITE_TXT);
-    k_print_var(edx);
-    k_printf("ESI: ", WHITE_TXT);
-    k_print_var(esi);
-    k_printf("EDI: ", WHITE_TXT);
-    k_print_var(edi);
-    k_printf("EBP: ", WHITE_TXT);
-    k_print_var(ebp);
-    k_printf("ESP: ", WHITE_TXT);
-    k_print_var(esp);
-    k_printf("EIP: ", WHITE_TXT);
-    k_print_var(eip);
+    k_print_register("Register EAX: ",&eax, 4, WHITE_TXT);
+    k_print_register("Register EBX: ",&ebx, 4, WHITE_TXT);
+    k_print_register("Register ECX: ",&ecx, 4, WHITE_TXT);
+    k_print_register("Register EDX: ",&edx, 4, WHITE_TXT);
+    k_print_register("Register ESP: ",&esp, 4, WHITE_TXT);
     k_print("------ CONTEXT DUMP END ------", WHITE_TXT);
 }
