@@ -1,46 +1,68 @@
-CC = gcc
-AS = as
-CFLAGS = -Wall
-ASFLAGS =
+CC = i386-elf-gcc
 
+#C_FLAGS =  -m32 -std=c11 -O2 -g -Wall -Wextra -Wpedantic -Wstrict-aliasing
+#C_FLAGS += -Wno-pointer-arith -Wno-unused-parameter
+#C_FLAGS += -nostdlib -nostdinc -ffreestanding -fno-pie -fno-stack-protector
+#C_FLAGS += -fno-builtin-function -fno-builtin
+
+C_EXTRA_HEADERS =  $(INCLUDE_DIR)/utils/colors.h \
+				   $(INCLUDE_DIR)/utils/macros.h \
+				   $(INCLUDE_DIR)/utils/types.h
+
+
+AS = nasm
+ASM_FLAGS = bin
+
+
+LD = i386-elf-ld
+LD_FLAGS = text 0x1000
+LD_SCRIPT = misc/linked.ld
+
+
+# Directories
 SRC_DIR = src
+INCLUDE_DIR = include
 BIN_DIR = bin
 
-# Use find to locate all .c and .S files in src and subdirectories
-C_FILES = $(shell find $(SRC_DIR) -name '*.c')
-S_FILES = $(shell find $(SRC_DIR) -name '*.S')
+OUTPUT = Snake.bin
 
-# Create object file names for .c and .S files in bin directory
-C_OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(BIN_DIR)/%.o, $(C_FILES))
-S_OBJ_FILES = $(patsubst $(SRC_DIR)/%.S, $(BIN_DIR)/%.o, $(S_FILES))
+# Find source files
+C_FILES = $(wildcard $(SRC_DIR)/**/*.c)
+ASM_FILES = $(wildcard $(SRC_DIR)/**/*.asm)
 
-# Target for the final binary
-TARGET = my_program
 
-# Targets
-all: dirs $(TARGET)
+# Generate object file names from source files
+OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(BIN_DIR)/%.o, $(C_FILES)) \
+            $(patsubst $(SRC_DIR)/%.asm, $(BIN_DIR)/%.o, $(ASM_FILES))
 
-# Build .c source files
+
+# Build rule for specific asm file
+$(BIN_DIR)/start.bin: $(SRC_DIR)/bootloader/start.asm
+	@mkdir -p $(@D)
+	$(AS) $< -f $(ASM_FLAGS) -o $@
+
+
+# Rules to build object files
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	@mkdir -p $(@D)
+	$(CC) $(C_FLAGS) -I$(INCLUDE_DIR)/$(dir $<) -c $< -o $(BIN_DIR)/$(notdir $@)
 
-# Build .S assembly source files
-$(BIN_DIR)/%.o: $(SRC_DIR)/%.S
-	$(AS) $(ASFLAGS) $< -o $(BIN_DIR)/$(notdir $@)
 
-# Link all object files into the final binary
-$(TARGET): $(C_OBJ_FILES) $(S_OBJ_FILES)
-	$(CC) $(C_OBJ_FILES) $(BIN_DIR)/$(notdir $(S_OBJ_FILES)) -o $(BIN_DIR)/$@
+$(BIN_DIR)/%.o: $(SRC_DIR)/%.asm
+	@mkdir -p $(@D)
+	$(AS) $(ASM_FLAGS) -o $@ $<
 
-dirs:
-	mkdir -p bin
+
+all: $(OBJ_FILES)
+	@echo "aaaaaaaa"
+	@echo $(OBJ_FILES)
+	$(LD) -T$(LD_FLAGS) -T $(LD_SCRIPT) -o $(BIN_DIR)/$(OUTPUT) $(OBJ_FILES) --oformat binary
+
 
 clean:
-	rm -rf *.o
-	rm -rf *.iso
-	rm -rf *.elf
-	rm -rf *.bin
-	rm -f $(TARGET)
-	rmdir $(BIN_DIR)
+	find . -name "*.o" -type f -exec rm {} \;
+	find . -name "*.bin" -type f -exec rm {} \;
+	rmdir -p $(BIN_DIR)
 
-.PHONY: all clean
+run:
+	qemu-system-x86_64 -drive format=raw,file="$(OUTPUT)",index=0,if=floppy, -m 128M
