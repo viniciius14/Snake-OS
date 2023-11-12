@@ -1,6 +1,13 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#define bool uint8_t
+#define true 1
+#define false 0
+
+#define SUCCESS 1
+#define FAIL 0
+
 typedef unsigned char       uint8_t;
 typedef unsigned short int  uint16_t;
 typedef unsigned int        uint32_t;
@@ -19,11 +26,5 @@ typedef uint8_t             bool;
 
 typedef uint8_t             color;
 
-#define bool uint8_t
-#define true 1
-#define false 0
-
-#define SUCCESS 1
-#define FAIL 0
 
 #endif

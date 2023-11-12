@@ -1,7 +1,7 @@
 #ifndef KERNEL_OPS_H
 #define KERNEL_OPS_H
 
-#include "types.h"
+#include "utils/types.h"
 
 void k_panic(const char *msg, const char* code, bool halt);
 void k_print(const char *msg, const color text_color);

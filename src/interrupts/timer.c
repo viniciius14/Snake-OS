@@ -1,7 +1,7 @@
-#include "timer.h"
-#include "io.h"
-#include "interrupts.h"
-#include "pic.h"
+#include "interrupts/timer.h"
+#include "utils/io.h"
+#include "interrupts/interrupts.h"
+#include "interrupts/pic.h"
 
 uint32_t tick = 0;
 

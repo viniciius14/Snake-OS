@@ -3,7 +3,7 @@
 /* Sets n bytes of memory to value starting at address dst */
 static inline void memset(void *dst, uint8_t value, size_t n) {
     uint8_t *d = dst;
-    while(n-- > 0){
+    while(n-- > 0) {
         *(d++) = value;
     }
 }
@@ -13,7 +13,7 @@ static inline void *memcpy(void *dst, const void *src, size_t n) {
     uint8_t *d = dst;
     const uint8_t *s = src;
 
-    while(n-- > 0){
+    while(n-- > 0) {
         *(d++) = *(s++);
     }
 }

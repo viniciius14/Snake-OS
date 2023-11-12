@@ -1,7 +1,7 @@
-#include "kernel_ops.h"
-#include "types.h"
-#include "colors.h"
-#include "debugger.h"
+#include "kernel/kernel_ops.h"
+#include "utils/types.h"
+#include "utils/colors.h"
+#include "utils/debugger.h"
 
 uint8_t curr_line = 0;
 
@@ -36,7 +36,7 @@ void k_print(const char *msg, color text_color) {
     /* The screen is 80 characters wide */
     uint8_t i = curr_line * 80 * 2;
 
-    while(*msg != 0){
+    while(*msg != 0) {
         video_memory[i++] = *msg;
 
         if(*msg == '\n') {

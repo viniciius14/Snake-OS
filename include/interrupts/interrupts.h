@@ -1,9 +1,9 @@
 #ifndef INTERRUTPS_H
 #define INTERRUPTS_H
 
-#include "types.h"
-#include "types.h"
-#include "macros.h"
+#include "utils/types.h"
+#include "utils/types.h"
+#include "utils/macros.h"
 
 /* IDT Descriptor Format */
 struct IDT_Descriptor {
@@ -12,13 +12,13 @@ struct IDT_Descriptor {
     uint8_t     __ignored;
     uint8_t     type;           /* includes Type, DPL and Present */
     uint16_t    offset_high;    /* DPL -> Descriptor Privilege Level*/
-}PACKED;
+} PACKED;
 
 /* IDT Pointer */
 struct IDT_Pointer {
     uint16_t    limit;      /* length of the IDT in bytes */
     uintptr_t   base;       /* address for the start of the IDT */
-}PACKED;
+} PACKED;
 
 void interrupts_init(void);
 

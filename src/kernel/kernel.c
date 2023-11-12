@@ -1,6 +1,6 @@
-#include "interrupts.h"
-#include "fpu.h"
-#include "kernel_ops.h"
+#include "interrupts/interrupts.h"
+#include "kernel/fpu.h"
+#include "kernel/kernel_ops.h"
 
 void kernel_main(void) {
     // char* video_memory = (char*)0xb8000;

@@ -1,4 +1,4 @@
-#include "io.h"
+#include "utils/io.h"
 
 /* Outputs a byte to the specified hardware port */
 static inline void outportb(uint32_t port, uint8_t value) {

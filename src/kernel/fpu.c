@@ -1,5 +1,5 @@
-#include "fpu.h"
-#include "types.h"
+#include "kernel/fpu.h"
+#include "utils/types.h"
 
 void fpu_init() {
     size_t t;

@@ -1,6 +1,6 @@
-#include "types.h"
-#include "interrupts.h"
-#include "pic.h"
+#include "utils/types.h"
+#include "interrupts/interrupts.h"
+#include "interrupts/pic.h"
 
 struct IDT_Pointer      idt_pointer;
 struct IDT_Descriptor   idt_list[256];
@@ -29,7 +29,7 @@ void load_IDT(void) {
     idt_pointer.limit = 256 * sizeof(struct IDT_Descriptor) - 1;
     idt_pointer.base = (uintptr_t) &idt_pointer;
 
-    memset(&idt_list[0], 0, sizeof(struct IDT_Descriptor) * 256);
+    memset(&idt_list, 0, sizeof(struct IDT_Descriptor) * 256);
 
     struct IDT_Pointer *idt = &idt_pointer;
 

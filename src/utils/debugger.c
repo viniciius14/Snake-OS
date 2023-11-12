@@ -1,7 +1,7 @@
-#include "debugger.h"
-#include "kernel_ops.h"
-#include "colors.h"
-#include "types.h"
+#include "utils/debugger.h"
+#include "kernel/kernel_ops.h"
+#include "utils/colors.h"
+#include "utils/types.h"
 
 /* Since we don't have a proper print func this hacky way will have to do for now */
 void trace_enter() {
