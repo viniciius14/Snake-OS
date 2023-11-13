@@ -3,8 +3,8 @@
 
 #include "utils/types.h"
 
-void  memset(void *dst, uint8_t value, size_t n);
-void  *memcpy(void *dst, const void *src, size_t n);
-void  *memmove(void *dst, const void *src, size_t n);
+static __inline__ void  memset(void *dst, uint8_t value, size_t n);
+static __inline__ void  *memcpy(void *dst, const void *src, size_t n);
+static __inline__ void  *memmove(void *dst, const void *src, size_t n);
 
 #endif /* MEM_OPS_H */

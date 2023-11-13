@@ -5,14 +5,14 @@
 
 /* Since we don't have a proper print func this hacky way will have to do for now */
 void trace_enter() {
-    const char* func_name = __FUNCTION__;
+    const char* func_name = __func__;
 
     k_print("Entering: ", WHITE_TXT);
     k_print_var(func_name);
 }
 
 void trace_leave() {
-    const char* func_name = __FUNCTION__;
+    const char* func_name = __func__;
 
     k_print("Leaving: ", WHITE_TXT);
     k_print_var(func_name);
