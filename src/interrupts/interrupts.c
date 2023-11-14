@@ -42,7 +42,7 @@ void load_IDT(void) {
 void add_int(int number, void(*handler_f)()) {
     uint16_t selector = 0x08;
     uint16_t settings = 0;
-    uint32_t offset = (uintptr_t)handler_f;
+    uint32_t offset = (uint32_t)handler_f;
 
     /* get CS selector */
     __asm__ __volatile__("movw %%cs,%0" :"=g"(selector));
@@ -67,25 +67,25 @@ void interrupts(bool opt) {
 
 /* Add all Exception Interrupts */
 void load_exceptions(void) {
-	add_int(0,  int00);
-    add_int(1,  int01);
-    add_int(2,  int02);
-    add_int(3,  int03);
-    add_int(4,  int04);
-    add_int(5,  int05);
-    add_int(6,  int06);
-    add_int(7,  int07);
-    add_int(8,  int08);
-    add_int(9,  int09);
-    add_int(10, int10);
-    add_int(11, int11);
-    add_int(12, int12);
-    add_int(13, int13);
-    add_int(14, int14);
-    add_int(16, int16);
-    add_int(17, int17);
-    add_int(18, int18);
-    add_int(19, int19);
+	add_int(0,  int_00);
+    add_int(1,  int_01);
+    add_int(2,  int_02);
+    add_int(3,  int_03);
+    add_int(4,  int_04);
+    add_int(5,  int_05);
+    add_int(6,  int_06);
+    add_int(7,  int_07);
+    add_int(8,  int_08);
+    add_int(9,  int_09);
+    add_int(10, int_10);
+    add_int(11, int_11);
+    add_int(12, int_12);
+    add_int(13, int_13);
+    add_int(14, int_14);
+    add_int(16, int_16);
+    add_int(17, int_17);
+    add_int(18, int_18);
+    add_int(19, int_19);
 	add_int(20, 0);       /* Intel reserved interrupts from 20 - 31 */
 	add_int(21, 0);
 	add_int(22, 0);

@@ -1,7 +1,7 @@
 #include "utils/mem_ops.h"
 
 /* Sets n bytes of memory to value starting at address dst */
-static __inline__ void memset(void *dst, uint8_t value, size_t n) {
+void memset(void *dst, uint8_t value, size_t n) {
     uint8_t *d = dst;
     while(n-- > 0) {
         *(d++) = value;
@@ -9,7 +9,7 @@ static __inline__ void memset(void *dst, uint8_t value, size_t n) {
 }
 
 /* Copies n bytes of memory from src to dst */
-static __inline__ void *memcpy(void *dst, const void *src, size_t n) {
+void *memcpy(void *dst, const void *src, size_t n) {
     uint8_t *d = dst;
     const uint8_t *s = src;
 
@@ -20,7 +20,7 @@ static __inline__ void *memcpy(void *dst, const void *src, size_t n) {
 }
 
 /* Moves n bytes from src to dst */
-static __inline__ void *memmove(void *dst, const void *src, size_t n) {
+void *memmove(void *dst, const void *src, size_t n) {
     if(src > dst) {
         return memcpy(dst, src, n);
     }

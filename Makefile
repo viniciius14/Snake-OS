@@ -10,7 +10,9 @@ C_FLAGS =-m32 -std=c11 -O2 -g -Wall -Wextra -Wpedantic -Wstrict-aliasing
 C_FLAGS +=-nostdlib -nostdinc -ffreestanding -fno-pie -fno-stack-protector
 C_FLAGS +=-fno-builtin-function -fno-builtin -nostartfiles -nodefaultlibs
 
-LD =i386-elf-ld
+LD =ld -m elf_i386
+#i386-elf-ld
+
 LD_FLAGS =text 0x1000
 LD_SCRIPT =misc/linker.ld
 
