@@ -1,14 +1,27 @@
-OUTPUT_FORMAT("binary")
-TARGET(elf32-i386)
 ENTRY(_start)
 SECTIONS
 {
-    . = 0x1000;    /* set starting address */
+    .text 0x100000 :
+    {
+        code = .; _code = .; __code = .;
+        *(.text)
+        . = ALIGN(4096);
+    }
 
-    .text ALIGN(4K) : { *(.text) }
-    .rodata ALIGN(4K) : { *(.rodata) }
-    .data ALIGN(4K) : { *(.data) }
-    .bss ALIGN(4K) : { *(.bss) }
+    .data :
+    {
+        data = .; _data = .; __data = .;
+        *(.data)
+        *(.rodata)
+        . = ALIGN(4096);
+    }
 
-    end = .;
+    .bss :
+    {
+        bss = .; _bss = .; __bss = .;
+        *(.bss)
+        . = ALIGN(4096);
+    }
+
+    end = .; _end = .; __end = .;
 }
