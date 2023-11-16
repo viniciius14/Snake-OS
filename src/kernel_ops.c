@@ -16,6 +16,9 @@ void k_panic(const char *message, const char* code, bool halt) {
     k_print_var(code);
 
     if(halt) {
+#ifdef DEBUG
+        context_dump();
+#endif /* DEBUG */
         k_print("\n\n\nFATAL\n\n\n", RED_TXT);
         __asm__ __volatile__("cli");
         __asm__ __volatile__("hlt");
@@ -23,9 +26,7 @@ void k_panic(const char *message, const char* code, bool halt) {
         k_print("\n\n\nNON FATAL\n\n\n", RED_TXT);
     }
 
-#if DEBUG
-    context_dump();
-#endif
+
 }
 
 void k_print(const char *msg, color text_color) {
@@ -89,6 +90,41 @@ void k_clear() {
     }
 
     curr_line = 0;
+}
+
+/* Sets n bytes of memory to value starting at address dst */
+void memset(void *dst, uint8_t value, size_t n) {
+    uint8_t *d = dst;
+    while(n-- > 0) {
+        *(d++) = value;
+    }
+}
+
+/* Copies n bytes of memory from src to dst */
+void *memcpy(void *dst, const void *src, size_t n) {
+    uint8_t *d = dst;
+    const uint8_t *s = src;
+
+    while(n-- > 0) {
+        *(d++) = *(s++);
+    }
+    return dst;
+}
+
+/* Moves n bytes from src to dst */
+void *memmove(void *dst, const void *src, size_t n) {
+    if(src > dst) {
+        return memcpy(dst, src, n);
+    }
+
+    uint8_t *d = dst;
+    const uint8_t *s = src;
+
+    for (size_t i = n; i > 0; i--) {
+        d[i - 1] = s[i - 1];
+    }
+
+    return dst;
 }
 
 void fpu_init() {

@@ -1,12 +1,14 @@
-[org 0x7c00]
-section .rodata       ; read only data section
+[ORG 0x7c00]                ; origin of memory addressing
+[BITS 16]
 
-KERNEL_LOCATION equ 0x1000
-CODE_SEG        equ code_descriptor - GDT_Start
-DATA_SEG        equ data_descriptor - GDT_Start
+section .rodata
+    KERNEL_LOCATION equ 0x1000
+    CODE_SEG equ GDT_code - GDT_start
+    DATA_SEG equ GDT_data - GDT_start
 
-section .text       ; text section (i.e. code)
-    global _start   ; declare _start as a global symbol
+section .text
+    global _start
+
 _start:
     mov [BOOT_DISK], dl
 
@@ -31,46 +33,46 @@ _start:
     mov al, 0x3
     int 0x10                ; text mode
 
+    cli
+    lgdt [GDT_descriptor]
 
-    cli                     ; disable all interrupts
-    lgdt [GDT_Descriptor]   ; load GDT
-
+    ; change last bit of cr0 to 1
     mov eax, cr0
     or eax, 1
-    mov cr0, eax            ; 32 bit protected mode
+    mov cr0, eax
 
-    jmp CODE_SEG:start_protected_mode   ; far jump (to another segment)
-
+    jmp CODE_SEG:protected_mode
     jmp $
 
 BOOT_DISK: db 0
 
-GDT_Start:
-    null_descriptor:
-        dd  0
-        dd  0
-    code_descriptor:
-        dw 0xffff
-        dw 0            ; 16 bits +
-        db 0            ; 8 bits = 24
-        db 0b10011010   ; type flags
-        db 0b11001111   ; other flags
-        db 0            ; last 8 bits of base
-    data_descriptor:
-        dw 0xffff
-        dw 0
-        db 0
+GDT_start:
+    GDT_null:
+        dd 0x0
+        dd 0x0
+    GDT_code:
+        dw 0xFFFF
+        dw 0x0
+        db 0x0
+        db 0b10011010
+        db 0b11001111
+        db 0x0
+    GDT_data:
+        dw 0xFFFF
+        dw 0x0
+        db 0x0
         db 0b10010010
         db 0b11001111
-        db 0
-GDT_End:
+        db 0x0
+GDT_end:
 
-GDT_Descriptor:
-    dw GDT_End - GDT_Start - 1  ; size
-    dd GDT_Start                ; start
+GDT_descriptor:
+    dw GDT_end - GDT_start - 1
+    dd GDT_start
 
-[bits 32]
-start_protected_mode:
+
+[BITS 32]
+protected_mode:
     mov ax, DATA_SEG
 	mov ds, ax
 	mov ss, ax
@@ -84,4 +86,4 @@ start_protected_mode:
     jmp KERNEL_LOCATION
 
 times 510-($-$$) db 0
-db 0x55, 0xaa
+dw 0xAA55

@@ -1,41 +1,6 @@
 #include "utils.h"
 #include "kernel_ops.h"
 
-/* Sets n bytes of memory to value starting at address dst */
-void memset(void *dst, uint8_t value, size_t n) {
-    uint8_t *d = dst;
-    while(n-- > 0) {
-        *(d++) = value;
-    }
-}
-
-/* Copies n bytes of memory from src to dst */
-void *memcpy(void *dst, const void *src, size_t n) {
-    uint8_t *d = dst;
-    const uint8_t *s = src;
-
-    while(n-- > 0) {
-        *(d++) = *(s++);
-    }
-    return dst;
-}
-
-/* Moves n bytes from src to dst */
-void *memmove(void *dst, const void *src, size_t n) {
-    if(src > dst) {
-        return memcpy(dst, src, n);
-    }
-
-    uint8_t *d = dst;
-    const uint8_t *s = src;
-
-    for (size_t i = n; i > 0; i--) {
-        d[i - 1] = s[i - 1];
-    }
-
-    return dst;
-}
-
 /* Outputs a uint8_t to the specified hardware port */
 void outportb(uint32_t port,uint8_t value) {
 	__asm__ volatile ("outb %%al,%%dx"::"d" (port), "a" (value));
@@ -60,7 +25,6 @@ uint16_t inportw(uint32_t port) {
 }
 
 #ifdef DEBUG
-
 /* Since we don't have a proper print func this hacky way will have to do for now */
 void trace_enter() {
     const char* func_name = __func__;
@@ -96,5 +60,4 @@ void context_dump() {
     k_print_register("Register ESP: ",&esp, 4, WHITE_TXT);
     k_print("------ CONTEXT DUMP END ------", WHITE_TXT);
 }
-
-#endif
+#endif /* DEBUG */
