@@ -1,27 +1,28 @@
+OUTPUT_FORMAT("binary")
 ENTRY(_start)
 SECTIONS
 {
-    .text 0x100000 :
+    . = 0x1000;    /* set starting address */
+
+    .text BLOCK(4K) : ALIGN(4K)
     {
-        code = .; _code = .; __code = .;
         *(.text)
-        . = ALIGN(4096);
     }
 
-    .data :
+    .rodata BLOCK(4K) : ALIGN(4K)
     {
-        data = .; _data = .; __data = .;
-        *(.data)
         *(.rodata)
-        . = ALIGN(4096);
     }
 
-    .bss :
+    .data BLOCK(4K) : ALIGN(4K)
     {
-        bss = .; _bss = .; __bss = .;
-        *(.bss)
-        . = ALIGN(4096);
+        *(.data)
     }
 
-    end = .; _end = .; __end = .;
+    .bss BLOCK(4K) : ALIGN(4K)
+    {
+        *(.bss)
+    }
+
+    end = .;
 }
