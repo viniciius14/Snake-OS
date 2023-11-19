@@ -7,12 +7,13 @@ struct IDT_Entry        idt_list[256] = {0};
 
 void interrupts_init(void) {
     /* Disable interrupts */
-    switch_interrupts(false);
-
-    idt_init();
+    // toggle_interrupts(false);
+    k_print("Aoggled interrupts\n", WHITE_TXT);
+    // idt_init();
+    // k_print("Finished idt_init()\n", WHITE_TXT);
 
     /* Enable interrupts */
-    switch_interrupts(true);
+    // toggle_interrupts(true);
 }
 
 void idt_init() {
@@ -20,6 +21,7 @@ void idt_init() {
     idt_pointer.base = (uintptr_t) &idt_list;
 
     memset(&idt_list, 0, sizeof(struct IDT_Entry) * 256);
+    k_print("Sucess memset\n", WHITE_TXT);
 
     idt_set_handler( 0, (uint32_t)isr0 , 0x08, 0x8E);
     idt_set_handler( 1, (uint32_t)isr1 , 0x08, 0x8E);
@@ -54,10 +56,13 @@ void idt_init() {
     idt_set_handler(30, (uint32_t)isr30, 0x08, 0x8E);
     idt_set_handler(31, (uint32_t)isr31, 0x08, 0x8E);
 
+    k_print("idt_set_handlers\n", WHITE_TXT);
+
     idt_flush((uint32_t)&idt_pointer);
+    k_print("idt_flush\n", WHITE_TXT);
 }
 
-void switch_interrupts(bool opt) {
+void toggle_interrupts(bool opt) {
     if(opt == true) {
         __asm__ volatile("sti");
     } else {

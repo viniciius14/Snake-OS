@@ -29,7 +29,7 @@ void interrupts_init(void);
 
 void idt_init(void);
 
-void switch_interrupts(bool opt);
+void toggle_interrupts(bool opt);
 
 void idt_set_handler(uint8_t isr_num, uint32_t handler, uint16_t selector, uint8_t flags);
 

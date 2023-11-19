@@ -3,7 +3,6 @@
 
 /* ---------- Defines ---------- */
 
-#define bool uint8_t
 #define true 1
 #define false 0
 
@@ -52,10 +51,12 @@ typedef uint64_t            size_t;
 
 typedef uint8_t             bool;
 
-typedef uint8_t             color;
+typedef char                color;
 
 
 /* ---------- Function prototypes ---------- */
+
+void kernel_main(void);
 
 /* Outputs a uint8_t to the specified hardware port */
 void outportb(uint32_t port,uint8_t value);
@@ -68,10 +69,10 @@ uint8_t inportb(uint32_t port);
 
 uint16_t inportw(uint32_t port);
 
-void trace_enter();
-void trace_leave();
-void context_dump();
-void checkpoint();
+void trace_enter(void);
+void trace_leave(void);
+void context_dump(void);
+void checkpoint(void);
 
 
 #endif /* UTILS_H */

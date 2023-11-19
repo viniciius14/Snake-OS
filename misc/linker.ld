@@ -2,10 +2,11 @@ OUTPUT_FORMAT("binary")
 ENTRY(_start)
 SECTIONS
 {
-    . = 0x1000;    /* set starting address */
+    . = 0x10000;
 
     .text BLOCK(4K) : ALIGN(4K)
     {
+        *(.text.prologue)
         *(.text)
     }
 

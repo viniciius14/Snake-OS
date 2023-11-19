@@ -5,9 +5,7 @@
 KERNEL_LOCATION equ 0x1000
 
 _start:
-
     mov [BOOT_DISK], dl
-
 
     xor ax, ax
     mov es, ax
@@ -16,31 +14,26 @@ _start:
     mov sp, bp
 
     mov bx, KERNEL_LOCATION
-    mov dh, 2
+    mov dh, 20
 
     mov ah, 0x02
-    mov al, dh 
+    mov al, dh
     mov ch, 0x00
     mov dh, 0x00
     mov cl, 0x02
     mov dl, [BOOT_DISK]
-    int 0x13                ; no error management, do your homework!
+    int 0x13
 
-
-    mov ah, 0x0
-    mov al, 0x3
+    mov ah, 0x0             ; clear the screen
+    mov al, 0x3             ; by switching to
     int 0x10                ; text mode
-
 
     CODE_SEG equ code_descriptor - GDT_Start
     DATA_SEG equ data_descriptor - GDT_Start
 
-
-
     cli                     ; disable all interrupts
 
-    ; Enable A20 gate
-    in al, 0x92
+    in al, 0x92             ; Enable A20 gate
     or al, 0x02
     out 0x92, al
 
@@ -64,12 +57,11 @@ start_protected_mode:
 	mov es, ax
 	mov fs, ax
 	mov gs, ax
-	
+
 	mov ebp, 0x90000		; 32 bit stack base pointer
 	mov esp, ebp
 
     jmp KERNEL_LOCATION
-
 
 GDT_Start:
     null_descriptor:
