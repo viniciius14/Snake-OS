@@ -9,9 +9,24 @@
 #define SUCCESS 1
 #define FAIL 0
 
-#define RED_TXT     0x04
-#define WHITE_TXT   0x07
-#define BLUE_TXT    0x09
+#define BLACK_TXT           0x00
+#define BLUE_TXT            0x01
+#define GREEN_TXT           0x02
+#define CYAN_TXT            0x03
+#define RED_TXT             0x04
+#define MAGENTA_TXT         0x05
+#define BROWN_TXT           0x06
+#define LIGHT_GRAY_TXT      0x07
+#define DARK_GRAY_TXT       0x08
+#define LIGHT_BLUE_TXT      0x09
+#define LIGHT_GREEN_TXT     0x0A
+#define LIGHT_CYAN_TXT      0x0B
+#define LIGHT_RED_TXT       0x0C
+#define LIGHT_MAGENTA_TXT   0x0D
+#define YELLOW_TXT          0x0E
+#define WHITE_TXT           0x0F
+
+
 
 #define PACKED __attribute__((packed))
 
@@ -32,6 +47,43 @@
 #define CTX_DMP(x)
 #define CHECKPOINT(x)
 #endif /* DEBUG */
+
+/* IRQ macros */
+#define ALL             0xFF
+#define TIMER           0
+#define KEYBOARD        1
+#define CASCADE         2
+#define COM2_4          3
+#define COM1_3          4
+#define LPT             5
+#define FLOPPY          6
+#define FREE7           7
+#define CLOCK           8
+#define FREE9           9
+#define FREE10          10
+#define FREE11          11
+#define PS2MOUSE        12
+#define COPROC          13
+#define IDE_1           14
+#define IDE_2           15
+
+/* PIC macros Master = PIC chip 1, Slave = PIC chip 2 */
+#define MASTER          0x20
+#define MASTERDATA      0x21
+#define SLAVE           0xA0
+#define SLAVEDATA       0xA1
+#define EOI             0x20
+
+#define ICW1_INIT       0x10    /* required for PIC initialisation */
+#define ICW1_EDGE       0x08    /* edge triggered IRQs */
+#define ICW1_SINGLE     0x02    /* only MASTER (not cascaded) */
+#define	ICW1_ICW4       0x01    /* there IS an ICW4 control word */
+#define ICW4_SFNM       0x10    /* Special Fully Nested Mode */
+#define ICW4_BUFFER     0x08    /* Buffered Mode */
+#define ICW4_MASTER     0x04    /* this is the Master PIC */
+#define ICW4_AEOI       0x02    /* Auto EOI */
+#define ICW4_8086       0x01    /* 80/86 Mode */
+
 
 /* ---------- Typedef's ---------- */
 

@@ -1,19 +1,21 @@
 #include "interrupts.h"
 #include "kernel_ops.h"
 #include "utils.h"
+#include "pic.h"
 
 struct IDT_Pointer      idt_pointer;
 struct IDT_Entry        idt_list[256] = {0};
 
 void interrupts_init(void) {
     /* Disable interrupts */
-    // toggle_interrupts(false);
-    k_print("Aoggled interrupts\n", WHITE_TXT);
-    // idt_init();
-    // k_print("Finished idt_init()\n", WHITE_TXT);
+    toggle_interrupts(false);
+	remapPIC(0x20,0x28);
+	maskIRQ(ALL);
+    idt_init();
+    k_print("Finished idt_init()\n", WHITE_TXT);
 
     /* Enable interrupts */
-    // toggle_interrupts(true);
+    toggle_interrupts(true);
 }
 
 void idt_init() {

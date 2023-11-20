@@ -1,7 +1,7 @@
 #include "kernel_ops.h"
 
 char* video_memory = (char*)0xB8000;
-uint8_t line = 0;
+uint8_t curr_line = 0;
 
 void k_panic(const char *message, const char* code, bool halt) {
     k_clear();
@@ -25,20 +25,22 @@ void k_panic(const char *message, const char* code, bool halt) {
     } else {
         k_print("\n\n\nNON FATAL\n\n\n", RED_TXT);
     }
-
-
 }
 
 void k_print(const char *msg, color text_color) {
-    // unsigned int i = line*80*2, color = WHITE_TXT;
-    uint8_t i = 0;
-	while(*msg != 0) {
-
-        video_memory[i++] = *msg;
+    /* The screen is 80 characters wide */
+    uint8_t i = curr_line * 80 * 2;
+    while (*msg != 0) {
+        if (*msg == '\n') {
+            curr_line++;
+            msg++;
+            continue;
+        }
+        video_memory[i++] = *msg++;
         video_memory[i++] = text_color;
-        msg++;
-	}
+    }
 }
+
 void k_print_var(const char *msg) {
     while(*msg != '\0') {
         char letter[] = {*msg, '\0'};
@@ -82,7 +84,7 @@ void k_clear(void) {
         video_memory[i++] = WHITE_TXT;
     }
 
-    line = 0;
+    curr_line = 0;
 }
 
 /* Sets n bytes of memory to value starting at address dst */
@@ -121,15 +123,15 @@ void *memmove(void *dst, const void *src, size_t n) {
 }
 
 void fpu_init() {
-    // size_t t;
+    size_t t;
 
-    // __asm__ __volatile__("clts");
-    // __asm__ __volatile__("mov %%cr0, %0" : "=r"(t));
-    // t &= ~(1 << 2);
-    // t |= (1 << 1);
-    // __asm__ __volatile__("mov %0, %%cr0" :: "r"(t));
-    // __asm__ __volatile__("mov %%cr4, %0" : "=r"(t));
-    // t |= 3 << 9;
-    // __asm__ __volatile__("mov %0, %%cr4" :: "r"(t));
-    // __asm__ __volatile__("fninit");
+    __asm__ __volatile__("clts");
+    __asm__ __volatile__("mov %%cr0, %0" : "=r"(t));
+    t &= ~(size_t)(1 << 2);
+    t |= (1 << 1);
+    __asm__ __volatile__("mov %0, %%cr0" :: "r"(t));
+    __asm__ __volatile__("mov %%cr4, %0" : "=r"(t));
+    t |= 3 << 9;
+    __asm__ __volatile__("mov %0, %%cr4" :: "r"(t));
+    __asm__ __volatile__("fninit");
 }
