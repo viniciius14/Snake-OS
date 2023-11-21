@@ -4,13 +4,13 @@
 void remapPIC(uint8_t pic1, uint8_t pic2) {
 	uint8_t md,sd;
 
-	md = inportb(MASTERDATA);                     // save state of MASTER DATA
-	sd = inportb(SLAVEDATA);                      // save state of SLAVE DATA
+	md = inportb(MASTERDATA);                   // save state of MASTER DATA
+	sd = inportb(SLAVEDATA);                    // save state of SLAVE DATA
 
 	outportb(MASTER, EOI);                      // Send EOI | resets the chip
 
-	outportb(MASTER, ICW1_INIT + ICW1_ICW4);      // ICW1 control word setup | just basic PIC stuff
-	outportb(SLAVE, ICW1_INIT + ICW1_ICW4);       // see interrupts/pic.h for more details about the values
+	outportb(MASTER, ICW1_INIT + ICW1_ICW4);    // ICW1 control word setup | just basic PIC stuff
+	outportb(SLAVE, ICW1_INIT + ICW1_ICW4);     // see interrupts/pic.h for more details about the values
 
 	outportb(MASTERDATA, pic1);                 // ICW2 maps IRQs 0-7 to whatever kernel passes
 	outportb(SLAVEDATA, pic2);                  // and same here except with IRQs 8-15
@@ -21,8 +21,8 @@ void remapPIC(uint8_t pic1, uint8_t pic2) {
 	outportb(MASTERDATA, ICW4_8086);            // ICW4 control word setup
 	outportb(SLAVEDATA, ICW4_8086);
 
-	outportb(MASTERDATA, md);                    // restore both MASTER DATA
-	outportb(SLAVEDATA, sd);                     // restore SLAVE DATA
+	outportb(MASTERDATA, md);                   // restore both MASTER DATA
+	outportb(SLAVEDATA, sd);                    // restore SLAVE DATA
 }
 
 /* makes IRQ unavailable so it can't fire an interrupt */

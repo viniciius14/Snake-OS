@@ -18,12 +18,7 @@ struct IDT_Pointer {
     uintptr_t   base;       /* address for the start of the IDT */
 } PACKED;
 
-struct registers {
-    uint32_t ds;
-    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
-    uint32_t int_no, error_code;
-    uint32_t eip, cs, eflags, useresp, ss;
-};
+typedef void (*isr_t)(registers_t);
 
 void interrupts_init(void);
 
@@ -33,9 +28,13 @@ void toggle_interrupts(bool opt);
 
 void idt_set_handler(uint8_t isr_num, uint32_t handler, uint16_t selector, uint8_t flags);
 
-void std_isr_handler(struct registers reg);
+void isr_handler(registers_t regs);
+
+void irq_handler(registers_t regs);
 
 extern void idt_flush(uint32_t addr);
+
+void register_interrupt_handler(uint8_t n, isr_t handler);
 
 // These extern directives let us access the addresses of our ASM ISR handlers.
 extern void isr0 (void);
@@ -70,5 +69,21 @@ extern void isr28(void);
 extern void isr29(void);
 extern void isr30(void);
 extern void isr31(void);
+extern void irq0 (void);
+extern void irq1 (void);
+extern void irq2 (void);
+extern void irq3 (void);
+extern void irq4 (void);
+extern void irq5 (void);
+extern void irq6 (void);
+extern void irq7 (void);
+extern void irq8 (void);
+extern void irq9 (void);
+extern void irq10(void);
+extern void irq11(void);
+extern void irq12(void);
+extern void irq13(void);
+extern void irq14(void);
+extern void irq15(void);
 
 #endif /* INTERRUPTS_H */

@@ -1,6 +1,9 @@
-#include "interrupts.h"
-#include "kernel_ops.h"
 #include "utils.h"
+#include "kernel_ops.h"
+#include "interrupts.h"
+#include "screen.h"
+#include "timer.h"
+
 
 
 void kernel_main(void) {
@@ -8,9 +11,11 @@ void kernel_main(void) {
 
     interrupts_init();
     // k_clear();
+    k_print("B2Hello, world!\n", WHITE_TXT);
 
-    // fpu_init();
-    //screen_init();
+    fpu_init();
+    init_timer(50);
+    // init_screen();
 
 
     // asm volatile("int $0x3");
