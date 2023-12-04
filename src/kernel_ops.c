@@ -1,91 +1,193 @@
 #include "kernel_ops.h"
 
-char* video_memory = (char*)0xB8000;
-uint8_t curr_line = 0;
+uint16_t* video_memory = (uint16_t*)0xB8000;
+
+uint8_t cursor_x = 0;
+uint8_t cursor_y = 0;
+
+void move_cursor(void) {
+    uint16_t cursorPosition = cursor_y * 80 + cursor_x;
+    outportb(0x3D4, 14);
+    outportb(0x3D5, cursorPosition >> 8);
+    outportb(0x3D4, 15);
+    outportb(0x3D5, cursorPosition);
+}
+
+void scroll(void) {
+    uint8_t attributeByte = (0 << 4) | (15 & 0x0F);
+    uint16_t blank = 0x20 | (attributeByte << 8);
+
+    if(cursor_y >= 25) {
+        int i;
+        for (i = 0*80; i < 24*80; i++) {
+            video_memory[i] = video_memory[i+80];
+        }
+        for (i = 24*80; i < 25*80; i++) {
+            video_memory[i] = blank;
+        }
+        cursor_y = 24;
+    }
+}
+
+void k_put_c(char c) {
+    // The background colour is black (0), the foreground is white (15).
+    uint8_t backColour = 0;
+    uint8_t foreColour = 15;
+
+    // The attribute byte is made up of two nibbles - the lower being the 
+    // foreground colour, and the upper the background colour.
+    uint8_t  attributeByte = (backColour << 4) | (foreColour & 0x0F);
+    // The attribute byte is the top 8 bits of the word we have to send to the
+    // VGA board.
+    uint16_t attribute = attributeByte << 8;
+    uint16_t *location;
+
+    // Handle a backspace, by moving the cursor back one space
+    if (c == 0x08 && cursor_x) {
+        cursor_x--;
+    }
+
+    // Handle a tab by increasing the cursor's X, but only to a point
+    // where it is divisible by 8.
+    else if (c == 0x09) {
+        cursor_x = (cursor_x+8) & ~(8-1);
+    }
+
+    // Handle carriage return
+    else if (c == '\r') {
+        cursor_x = 0;
+    }
+
+    // Handle newline by moving cursor back to left and increasing the row
+    else if (c == '\n') {
+        cursor_x = 0;
+        cursor_y++;
+    }
+    // Handle any other printable character.
+    else if(c >= ' ') {
+        location = video_memory + (cursor_y*80 + cursor_x);
+        *location = c | attribute;
+        cursor_x++;
+    }
+
+    // Check if we need to insert a new line because we have reached the end
+    // of the screen.
+    if (cursor_x >= 80) {
+        cursor_x = 0;
+        cursor_y ++;
+    }
+
+    scroll();
+    move_cursor();
+}
+
+void k_clear(void) {
+    uint8_t attributeByte = (0 << 4) | (15 & 0x0F);
+    uint16_t blank = 0x20 | (attributeByte << 8);
+
+    uint32_t i;
+    for (i = 0; i < 80*25; i++) {
+        video_memory[i] = blank;
+    }
+    cursor_x = 0;
+    cursor_y = 0;
+    move_cursor();
+}
+
+void k_print(const char *c) {
+    uint32_t i = 0;
+    while (c[i]) {
+        k_put_c(c[i++]);
+    }
+}
+
+void k_print_hex(uint32_t n) {
+    int32_t tmp;
+
+    k_print("0x");
+
+    char noZeroes = 1;
+
+    int i;
+    for (i = 28; i > 0; i -= 4) {
+        tmp = (n >> i) & 0xF;
+
+        if (tmp == 0 && noZeroes != 0) {
+            continue;
+        }
+
+        if (tmp >= 0xA) {
+            noZeroes = 0;
+            char send = tmp - 0xA + 'a';
+            k_print(&send);
+        } else {
+            noZeroes = 0;
+            char send = tmp + '0';
+            k_print(&send);
+        }
+    }
+
+    tmp = n & 0xF;
+
+    if (tmp >= 0xA) {
+        char send = tmp - 0xA + 'a';
+        k_print(&send);
+    } else {
+        char send = tmp + '0';
+        k_print(&send);
+    }
+}
+
+void k_print_dec(uint32_t n) {
+
+    if (n == 0) {
+        char zero = '0';
+        k_print(&zero);
+        return;
+    }
+
+    int32_t acc = n, i = 0, j = 0;
+    char c[32], c2[32];
+
+    while (acc > 0) {
+        c[i] = '0' + acc%10;
+        acc /= 10;
+        i++;
+    }
+
+    c[i] = 0;
+    c2[i--] = 0;
+
+    while(i >= 0){
+        c2[i--] = c[j++];
+    }
+
+    k_print(c2);
+}
 
 void k_panic(const char *message, const char* code, bool halt) {
     k_clear();
 
-    k_print("SYSTEM ERROR\n", RED_TXT);
-    k_print("Exception has ocurred.\n", WHITE_TXT);
+    k_print("SYSTEM ERROR\n");
+    k_print("Exception has ocurred.\n");
 
-    k_print("Message: ", WHITE_TXT);
-    k_print_var(message);
-
-    k_print("Code: ", WHITE_TXT);
-    k_print_var(code);
+    k_print("Message: ");
+    k_print(message);
+    k_print("Code: ");
+    k_print(code);
 
     if(halt) {
 #ifdef DEBUG
         context_dump();
 #endif /* DEBUG */
-        k_print("\n\n\nFATAL\n\n\n", RED_TXT);
+        k_print("\n\n\nFATAL\n\n\n");
         __asm__ __volatile__("cli");
         __asm__ __volatile__("hlt");
     } else {
-        k_print("\n\n\nNON FATAL\n\n\n", RED_TXT);
+        k_print("\n\n\nNON FATAL\n\n\n");
     }
 }
 
-void k_print(const char *msg, color text_color) {
-    /* The screen is 80 characters wide */
-    uint8_t i = curr_line * 80 * 2;
-    while (*msg != 0) {
-        if (*msg == '\n') {
-            curr_line++;
-            msg++;
-            continue;
-        }
-        video_memory[i++] = *msg++;
-        video_memory[i++] = text_color;
-    }
-}
-
-void k_print_var(const char *msg) {
-    while(*msg != '\0') {
-        char letter[] = {*msg, '\0'};
-        k_print(letter, BLUE_TXT);
-        msg++;
-    }
-    char nl = '\n';
-    k_print(&nl, WHITE_TXT);
-}
-
-void k_print_register(const char* msg, const void *reg_addr, size_t num_bytes, color text_color) {
-    k_print(msg, text_color);
-
-    for (size_t byte = 0; byte < num_bytes; byte++) {
-        // Extract each byte from the register address
-        uint8_t current_byte = *((const uint8_t *)reg_addr + byte);
-
-        /* Convert the byte to a two-digit hexadecimal string */
-        char hex_string[3];
-        hex_string[0] = "0123456789ABCDEF"[current_byte >> 4];
-        hex_string[1] = "0123456789ABCDEF"[current_byte & 0x0F];
-        hex_string[2] = '\0';
-
-        /* Print the two-digit hexadecimal string */
-        k_print(hex_string, text_color);
-
-        /* Print a space between bytes for better readability */
-        if (byte < num_bytes - 1) {
-            k_print(" ", text_color);
-        }
-    }
-
-    k_print("\n", WHITE_TXT);
-}
-
-void k_clear(void) {
-    uint16_t i = 0;
-
-    while(i < (80 * 25 * 2)) {
-        video_memory[i++] = ' ';
-        video_memory[i++] = WHITE_TXT;
-    }
-
-    curr_line = 0;
-}
 
 /* Sets n bytes of memory to value starting at address dst */
 void memset(void *dst, uint8_t value, size_t n) {

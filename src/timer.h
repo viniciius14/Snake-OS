@@ -2,6 +2,7 @@
 #define TIMER_H
 
 #include "utils.h"
+#include "interrupts.h"
 
 #define TIMER_TPS 363
 

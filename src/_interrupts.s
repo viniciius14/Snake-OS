@@ -1,4 +1,3 @@
-; Graciously taken from http://www.jamesmolloy.co.uk/tutorial_html/4.-The%20GDT%20and%20IDT.html
 ;
 ; interrupt.s -- Contains interrupt service routine wrappers.
 ;                Based on Bran's kernel development tutorials.

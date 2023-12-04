@@ -3,11 +3,14 @@
 
 #include "utils.h"
 
-void k_panic(const char *msg, const char* code, bool halt);
-void k_print(const char *msg, const color text_color);
-void k_print_var(const char * msg);
-void k_print_register(const char* msg, const void *reg_addr, size_t num_bytes, color text_color);
+void move_cursor(void);
+void scroll(void);
+void k_put_c(char c);
 void k_clear(void);
+void k_print(const char *c);
+void k_print_hex(uint32_t);
+void k_print_dec(uint32_t);
+void k_panic(const char *, const char*, bool);
 
 void  memset(void *dst, uint8_t value, size_t n);
 void  *memcpy(void *dst, const void *src, size_t n);

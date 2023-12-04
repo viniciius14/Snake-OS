@@ -1,42 +1,62 @@
-#ifndef INTERRUTPS_H
+#ifndef INTERRUPTS_H
 #define INTERRUPTS_H
 
 #include "utils.h"
 
-/* A struct describing an interrupt gate */
-struct IDT_Entry {
-    uint16_t    offset_low;     /* The address of the ISR, split between 2 fields*/
-    uint16_t    selector;       /* Code selector that the ISR will use */
-    uint8_t     __ignored;
-    uint8_t     flags;          /* includes Type, DPL and Present */
-    uint16_t    offset_high;    /* DPL -> Descriptor Privilege Level*/
-} PACKED;
+/* IRQ */
+#define IRQ0  32
+#define IRQ1  33
+#define IRQ2  34
+#define IRQ3  35
+#define IRQ4  36
+#define IRQ5  37
+#define IRQ6  38
+#define IRQ7  39
+#define IRQ8  40
+#define IRQ9  41
+#define IRQ10 42
+#define IRQ11 43
+#define IRQ12 44
+#define IRQ13 45
+#define IRQ14 46
+#define IRQ15 47
 
-/* IDT Pointer */
-struct IDT_Pointer {
-    uint16_t    limit;      /* length of the IDT in bytes */
-    uintptr_t   base;       /* address for the start of the IDT */
-} PACKED;
+/* ---------- Structs ---------- */
 
+struct idt_entry_struct {
+    uint16_t base_lo;
+    uint16_t sel;
+    uint8_t  always0;
+    uint8_t  flags;
+    uint16_t base_hi;
+} __attribute__((packed));
+
+struct idt_ptr_struct {
+    uint16_t limit;
+    uint32_t base;
+} __attribute__((packed));
+
+struct registers {
+    uint32_t ds;
+    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
+    uint32_t int_no, error_code;
+    uint32_t eip, cs, eflags, useresp, ss;
+};
+
+typedef struct registers        registers_t;
 typedef void (*isr_t)(registers_t);
 
-void interrupts_init(void);
+typedef struct idt_ptr_struct       idt_ptr_t;
+typedef struct idt_entry_struct     idt_entry_t;
 
-void idt_init(void);
+void init_idt(void);
 
-void toggle_interrupts(bool opt);
-
-void idt_set_handler(uint8_t isr_num, uint32_t handler, uint16_t selector, uint8_t flags);
-
-void isr_handler(registers_t regs);
-
-void irq_handler(registers_t regs);
-
-extern void idt_flush(uint32_t addr);
+void idt_set_gate(uint8_t, uint32_t, uint16_t, uint8_t);
 
 void register_interrupt_handler(uint8_t n, isr_t handler);
 
-// These extern directives let us access the addresses of our ASM ISR handlers.
+extern void idt_flush(uint32_t);
+
 extern void isr0 (void);
 extern void isr1 (void);
 extern void isr2 (void);

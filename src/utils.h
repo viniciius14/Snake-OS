@@ -26,8 +26,6 @@
 #define YELLOW_TXT          0x0E
 #define WHITE_TXT           0x0F
 
-
-
 #define PACKED __attribute__((packed))
 
 #define NULL 0
@@ -48,24 +46,26 @@
 #define CHECKPOINT(x)
 #endif /* DEBUG */
 
+
+
 /* IRQ macros */
 #define ALL             0xFF
-#define TIMER           0
-#define KEYBOARD        1
-#define CASCADE         2
-#define COM2_4          3
-#define COM1_3          4
-#define LPT             5
-#define FLOPPY          6
-#define FREE7           7
-#define CLOCK           8
-#define FREE9           9
-#define FREE10          10
-#define FREE11          11
-#define PS2MOUSE        12
-#define COPROC          13
-#define IDE_1           14
-#define IDE_2           15
+#define TIMER           0x00
+#define KEYBOARD        0x01
+#define CASCADE         0x02
+#define COM2_4          0x03
+#define COM1_3          0x04
+#define LPT             0x05
+#define FLOPPY          0x06
+#define FREE7           0x07
+#define CLOCK           0x08
+#define FREE9           0x09
+#define FREE10          0x10
+#define FREE11          0x11
+#define PS2MOUSE        0x12
+#define COPROC          0x13
+#define IDE_1           0x14
+#define IDE_2           0x15
 
 /* PIC macros Master = PIC chip 1, Slave = PIC chip 2 */
 #define MASTER          0x20
@@ -83,7 +83,6 @@
 #define ICW4_MASTER     0x04    /* this is the Master PIC */
 #define ICW4_AEOI       0x02    /* Auto EOI */
 #define ICW4_8086       0x01    /* 80/86 Mode */
-
 
 /* ---------- Typedef's ---------- */
 
@@ -104,14 +103,6 @@ typedef uint64_t            size_t;
 typedef uint8_t             bool;
 
 typedef char                color;
-
-typedef struct registers {
-    uint32_t ds;
-    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
-    uint32_t int_no, error_code;
-    uint32_t eip, cs, eflags, useresp, ss;
-}registers_t;
-
 
 
 /* ---------- Function prototypes ---------- */

@@ -29,17 +29,19 @@ uint16_t inportw(uint32_t port) {
 void trace_enter() {
     const char* func_name = __func__;
 
-    k_print("Entering: ", WHITE_TXT);
-    k_print_var(func_name);
+    k_print("Entering: ");
+    k_print(func_name);
+    k_print(" \n");
 }
 
 void trace_leave() {
     const char* func_name = __func__;
 
-    k_print("Leaving: ", WHITE_TXT);
-    k_print_var(func_name);
+    k_print("Leaving: ");
+    k_print(func_name);
+    k_print(" \n");
 }
-
+/* WIP */
 void context_dump() {
     uint32_t eax, ebx, ecx, edx, esp;
 
@@ -52,12 +54,12 @@ void context_dump() {
         : "=r" (eax), "=r" (ebx), "=r" (ecx), "=r" (edx), "=r" (esp)
     );
 
-    k_print("------ CONTEXT DUMP ------", WHITE_TXT);
-    k_print_register("Register EAX: ",&eax, 4, WHITE_TXT);
-    k_print_register("Register EBX: ",&ebx, 4, WHITE_TXT);
-    k_print_register("Register ECX: ",&ecx, 4, WHITE_TXT);
-    k_print_register("Register EDX: ",&edx, 4, WHITE_TXT);
-    k_print_register("Register ESP: ",&esp, 4, WHITE_TXT);
-    k_print("------ CONTEXT DUMP END ------", WHITE_TXT);
+    // k_print("------ CONTEXT DUMP ------");
+    // k_print_register("Register EAX: ",&eax, 4);
+    // k_print_register("Register EBX: ",&ebx, 4);
+    // k_print_register("Register ECX: ",&ecx, 4);
+    // k_print_register("Register EDX: ",&edx, 4);
+    // k_print_register("Register ESP: ",&esp, 4);
+    // k_print("------ CONTEXT DUMP END ------");
 }
 #endif /* DEBUG */
