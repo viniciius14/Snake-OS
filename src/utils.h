@@ -67,12 +67,7 @@
 #define IDE_1           0x14
 #define IDE_2           0x15
 
-/* PIC macros Master = PIC chip 1, Slave = PIC chip 2 */
-#define MASTER          0x20
-#define MASTERDATA      0x21
-#define SLAVE           0xA0
-#define SLAVEDATA       0xA1
-#define EOI             0x20
+
 
 #define ICW1_INIT       0x10    /* required for PIC initialisation */
 #define ICW1_EDGE       0x08    /* edge triggered IRQs */

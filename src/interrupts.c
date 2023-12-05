@@ -1,5 +1,6 @@
 #include "interrupts.h"
 #include "kernel_ops.h"
+#include "pic.h"
 
 idt_entry_t idt_entries[256];
 idt_ptr_t   idt_ptr;
@@ -78,15 +79,38 @@ void init_idt(void) {
 }
 
 void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags) {
-    idt_entries[num].base_lo = base & 0xFFFF;
+    idt_entries[num].base_lo = (uint16_t)(base & 0xFFFF);
     idt_entries[num].sel     = sel;
     idt_entries[num].always0 = 0;
     idt_entries[num].flags   = flags;
     idt_entries[num].base_hi = (uint16_t)((base >> 16) & 0xFFFF);
 }
 
+// static void irq_set_mask(size_t i) {
+//     u16 port = i < 8 ? PIC1_DATA : PIC2_DATA;
+//     u8 value = inportb(port) | (1 << i);
+//     outportb(port, value);
+// }
+
+static void irq_clear_mask(size_t i) {
+    uint16_t port = i < 8 ? (0x20 + 1) : (0xA0 + 1);
+    uint8_t value = inportb(port) & ~(1 << i);
+    outportb(port, value);
+}
+
 void register_interrupt_handler(uint8_t n, isr_t handler) {
+    // asm("cli");
+    k_print("HERE1\n");
+    __asm__ volatile ("cli");
     interrupt_handlers[n] = handler;
+    irq_clear_mask(n);
+    __asm__ volatile ("cli");
+    k_print("HERE2\n");
+
+
+    // irq_clear_mask(n);
+    // unmaskIRQ(n);
+    // asm("sti");
 }
 
 void isr_handler(registers_t regs) {
