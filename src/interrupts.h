@@ -55,7 +55,7 @@ void idt_set_gate(uint8_t, uint32_t, uint16_t, uint8_t);
 
 void register_interrupt_handler(uint8_t n, isr_t handler);
 
-extern void idt_flush(uint32_t);
+extern void idt_load(uint32_t);
 
 extern void isr0 (void);
 extern void isr1 (void);

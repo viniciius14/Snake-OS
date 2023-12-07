@@ -146,9 +146,9 @@ irq_common_stub:
     sti
     iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
 
-[GLOBAL idt_flush]    ; Allows the C code to call idt_flush().
+[GLOBAL idt_load]    ; Allows the C code to call idt_load().
 
-idt_flush:
+idt_load:
     mov eax, [esp+4]  ; Get the pointer to the IDT, passed as a parameter.
     lidt [eax]        ; Load the IDT pointer.
     ret
