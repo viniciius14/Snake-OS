@@ -1,7 +1,7 @@
 #!/bin/bash
 
 bin_dir="../bin"
-gcc_flags="-Wall -Wextra -m32 -nostdlib -fno-builtin"
+gcc_flags="-Wall -Wextra -m32 -nostdlib -fno-builtin -I."
 
 # Create an array to store the list of .o files
 object_files=()
