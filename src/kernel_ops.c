@@ -224,6 +224,7 @@ void *memmove(void *dst, const void *src, size_t n) {
     return dst;
 }
 
+/* Initializes the floating point unit */
 void init_fpu() {
     size_t t;
 

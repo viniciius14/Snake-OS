@@ -14,10 +14,10 @@ _start:
     mov sp, bp
 
     mov bx, KERNEL_LOCATION
-    mov dh, 40
+    mov dh, 40      ; sectors to read
 
     mov ah, 0x02
-    mov al, dh      ; sectors to read
+    mov al, dh      ; read 40 sectors at 512 bytes a sector = 20480 bytes to use
     mov ch, 0x00
     mov dh, 0x00
     mov cl, 0x02
