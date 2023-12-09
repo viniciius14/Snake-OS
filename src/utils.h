@@ -1,6 +1,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+// #include "debug.h"
+
 /* ---------- Defines ---------- */
 
 #define true 1
@@ -27,57 +29,14 @@
 #define WHITE_TXT           0x0F
 
 #define PACKED __attribute__((packed))
+#define INTERRUPT __attribute__((interrupt))
 
 #define NULL 0
 
 #define CAT(x, y) x##y
 
-#ifdef DEBUG
-#define TRACE_E(x)      void trace_enter(x);
-#define TRACE_L(x)      void trace_leave(x);
-#define PRINTF(x)       void debug_printf(x);
-#define CTX_DMP(x)      void context_dump(x);
-#define CHECKPOINT(x)   void checkpoint(x);
-#else
-#define TRACE_E(x)
-#define TRACE_L(x)
-#define PRINTF(x)
-#define CTX_DMP(x)
-#define CHECKPOINT(x)
-#endif /* DEBUG */
-
-
-
-/* IRQ macros */
-#define ALL             0xFF
-#define TIMER           0x00
-#define KEYBOARD        0x01
-#define CASCADE         0x02
-#define COM2_4          0x03
-#define COM1_3          0x04
-#define LPT             0x05
-#define FLOPPY          0x06
-#define FREE7           0x07
-#define CLOCK           0x08
-#define FREE9           0x09
-#define FREE10          0x10
-#define FREE11          0x11
-#define PS2MOUSE        0x12
-#define COPROC          0x13
-#define IDE_1           0x14
-#define IDE_2           0x15
-
-
-
-#define ICW1_INIT       0x10    /* required for PIC initialisation */
-#define ICW1_EDGE       0x08    /* edge triggered IRQs */
-#define ICW1_SINGLE     0x02    /* only MASTER (not cascaded) */
-#define	ICW1_ICW4       0x01    /* there IS an ICW4 control word */
-#define ICW4_SFNM       0x10    /* Special Fully Nested Mode */
-#define ICW4_BUFFER     0x08    /* Buffered Mode */
-#define ICW4_MASTER     0x04    /* this is the Master PIC */
-#define ICW4_AEOI       0x02    /* Auto EOI */
-#define ICW4_8086       0x01    /* 80/86 Mode */
+#define STI() __asm__ volatile("sti");
+#define CLI() __asm__ volatile("cli");
 
 /* ---------- Typedef's ---------- */
 
@@ -115,10 +74,6 @@ uint8_t inportb(uint32_t port);
 
 uint16_t inportw(uint32_t port);
 
-void trace_enter(void);
-void trace_leave(void);
-void context_dump(void);
-void checkpoint(void);
 
 
 #endif /* UTILS_H */
