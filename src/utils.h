@@ -64,15 +64,15 @@ typedef char                color;
 void kernel_main(void);
 
 /* Outputs a uint8_t to the specified hardware port */
-void outportb(uint32_t port,uint8_t value);
+void outb(uint32_t, uint8_t);
 
 /* Outputs a word to a port */
-void outportw(uint32_t port,uint32_t value);
+void outw(uint32_t, uint32_t);
 
 /* gets a uint8_t from a port */
-uint8_t inportb(uint32_t port);
+uint8_t inb(uint32_t);
 
-uint16_t inportw(uint32_t port);
+uint16_t inw(uint32_t);
 
 
 

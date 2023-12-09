@@ -64,7 +64,7 @@ void set_idt_descriptor_32(uint8_t entry_number, void *isr, uint8_t flags) {
 
 /* Setup IDT */
 void init_idt_32(void) {
-    idtr32.limit = (uint16_t)((sizeof(idt_entry_32_t) * 256) - 1); // TODO do we need to remvoe the -1?
+    idtr32.limit = (uint16_t)((sizeof(idt_entry_32_t) * 256)); // TODO do we need to remvoe the -1?
     idtr32.base  = (uintptr_t)&idt32[0];
 
     /* Setup exception handler ISR 0 - 31 */

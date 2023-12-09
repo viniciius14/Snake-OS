@@ -7,10 +7,10 @@ uint8_t cursor_y = 0;
 
 void move_cursor(void) {
     uint16_t cursorPosition = cursor_y * 80 + cursor_x;
-    outportb(0x3D4, 14);
-    outportb(0x3D5, cursorPosition >> 8);
-    outportb(0x3D4, 15);
-    outportb(0x3D5, cursorPosition);
+    outb(0x3D4, 14);
+    outb(0x3D5, cursorPosition >> 8);
+    outb(0x3D4, 15);
+    outb(0x3D5, cursorPosition);
 }
 
 void scroll(void) {
