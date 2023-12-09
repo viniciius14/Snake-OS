@@ -41,14 +41,14 @@ INTERRUPT void default_excp_handler(int_frame_32_t *int_frame_32) {
 
 /* Default exception handler with error code */
 INTERRUPT void default_excp_handler_err_code(int_frame_32_t *int_frame_32, uint32_t error_code) {
-    k_print("default_excp_handler was called with error code: ");
+    k_print("default_excp_handler_err_code was called with error code: ");
     k_print_dec(error_code);
 
 }
 
 /* Default interrupt hadnler */
 INTERRUPT void default_int_handler(int_frame_32_t *int_frame_32) {
-    k_print("default_excp_handler was called with error code: ");
+    k_print("default_int_handler was called! ");
 }
 
 /* Add an ISR to the IDT */
