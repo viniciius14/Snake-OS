@@ -2,6 +2,7 @@
 #include "kernel_ops.h"
 #include "idt.h"
 #include "pic.h"
+#include "fpu.h"
 #include "timer.h"
 #include "keyboard.h"
 
@@ -10,7 +11,7 @@ void kernel_main(void) {
 
     /* Setup interrups */
     init_idt();
-
+    init_fpu();
     /* Mask off all hardware interrupts (disable PIC) */
     disable_pic();
 
