@@ -5,11 +5,11 @@
 
 /* ---------- Defines ---------- */
 
-#define true 1
-#define false 0
+#define true                1
+#define false               0
 
-#define SUCCESS 1
-#define FAIL 0
+#define SUCCESS             1
+#define FAIL                0
 
 #define BLACK_TXT           0x00
 #define BLUE_TXT            0x01
@@ -28,15 +28,15 @@
 #define YELLOW_TXT          0x0E
 #define WHITE_TXT           0x0F
 
-#define PACKED __attribute__((packed))
-#define INTERRUPT __attribute__((interrupt))
+#define PACKED              __attribute__((packed))
+#define INTERRUPT           __attribute__((interrupt))
 
-#define NULL 0
+#define NULL                0
 
-#define CAT(x, y) x##y
+#define CAT(x, y)           x##y
 
-#define STI() __asm__ volatile("sti");
-#define CLI() __asm__ volatile("cli");
+#define STI()               __asm__ __volatile__("sti")
+#define CLI()               __asm__ __volatile__("cli")
 
 /* ---------- Typedef's ---------- */
 
@@ -61,19 +61,22 @@ typedef char                color;
 
 /* ---------- Function prototypes ---------- */
 
+/* First C function that's ran */
 void kernel_main(void);
 
-/* Outputs a uint8_t to the specified hardware port */
+/* Outputs a byte to the specified hardware port */
 void outb(uint32_t, uint8_t);
 
-/* Outputs a word to a port */
+/* Outputs a word to the specified hardware port */
 void outw(uint32_t, uint32_t);
 
-/* gets a uint8_t from a port */
+/* Gets a byte from the specified hardware port */
 uint8_t inb(uint32_t);
 
+/* Gets a word from to the specified hardware port */
 uint16_t inw(uint32_t);
 
-
+/* Wait 1 I/O cycle for I/O operation to complete */
+void io_wait(void);
 
 #endif /* UTILS_H */

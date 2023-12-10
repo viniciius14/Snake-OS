@@ -1,5 +1,4 @@
 #include "utils.h"
-#include "kernel_ops.h"
 
 /* Outputs a uint8_t to the specified hardware port */
 void outb(uint32_t port,uint8_t value) {

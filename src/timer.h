@@ -6,16 +6,11 @@
 #include "pic.h"
 #include "kernel_ops.h"
 
-uint32_t tick = 0;
+
+void init_timer(void);
 
 /* PIT timer channel 0 PIC IRQ0 interrupt handler */
-INTERRUPT void timer_irq0_handler(int_frame_32_t *frame) {
-    k_print_dec(tick++);
-    k_print("\n");
-
-    send_pic_eoi(0);
-}
-
+INTERRUPT void timer_handler(int_frame_32_t *frame);
 
 
 #endif /* TIMER_H */
