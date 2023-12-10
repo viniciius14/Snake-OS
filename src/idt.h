@@ -2,6 +2,7 @@
 #define IDT_H
 
 #include "utils.h"
+#include "kernel_ops.h"
 
 #define TRAP_GATE_FLAGS 0x8F
 #define INT_GATE_FLAGS  0x8E

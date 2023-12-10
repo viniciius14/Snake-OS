@@ -4,20 +4,23 @@ idt_entry_32_t idt32[256];
 idtr_32_t idtr32;
 
 /* Default exception handler with no error code */
-void default_excp_handler(int_frame_32_t *int_frame_32) {
+void default_excp_handler(int_frame_32_t *frame) {
+    (void)frame;
     k_print("default_excp_handler was called");
 }
 
 
 /* Default exception handler with error code */
-void default_excp_handler_err_code(int_frame_32_t *int_frame_32, uint32_t error_code) {
+void default_excp_handler_err_code(int_frame_32_t *frame, uint32_t error_code) {
+    (void)frame;
     k_print("default_excp_handler_err_code was called with error code: ");
     k_print_dec(error_code);
 
 }
 
 /* Default interrupt hadnler */
-void default_int_handler(int_frame_32_t *int_frame_32) {
+void default_int_handler(int_frame_32_t *frame) {
+    (void)frame;
     k_print("default_int_handler was called! ");
 }
 

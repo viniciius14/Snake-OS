@@ -10,6 +10,7 @@ void init_timer(void) {
 
 /* PIT timer channel 0 PIC IRQ0 interrupt handler */
 INTERRUPT void timer_handler(int_frame_32_t *frame) {
+    (void)frame;
     // k_print_dec(tick++);
     // k_print("\n");
     tick++;

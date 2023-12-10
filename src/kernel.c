@@ -22,7 +22,6 @@ void kernel_main(void) {
     init_timer();
 
     init_keyboard();
-    k_print("keyboard initialized\n");
 
     __asm__ __volatile__ ("sti");
 

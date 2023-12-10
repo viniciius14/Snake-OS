@@ -1,7 +1,7 @@
 #include "pic.h"
 
 
-/* Send end of interrupt command to signal IQR has been handled */
+/* Send end of interrupt command to signal IRQ has been handled */
 void send_pic_eoi(uint8_t irq) {
     if (irq >= 8) {
         outb(PIC_2_CMD, PIC_EOI);
