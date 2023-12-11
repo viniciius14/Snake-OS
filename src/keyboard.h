@@ -9,12 +9,12 @@
 
 #define KEY_ENTER       '\n'
 #define KEY_BACKSPACE   0x08
-
+#define KEY_TAB         0x09
 /*
 #define KEY_ESC         0x01
 #define KEY_OEM6        0x0D
 #define KEY_OEM1        0x1B
-#define KEY_TAB         0x0F
+
 #define KEY_LCTRL       0x1D
 #define KEY_OEM3        0x27
 #define KEY_OEM7        0x28
