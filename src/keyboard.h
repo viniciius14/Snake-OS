@@ -8,10 +8,12 @@
 #define PS2_DATA_PORT   0x60
 
 #define KEY_ENTER       '\n'
+#define KEY_BACKSPACE   0x08
+
+/*
 #define KEY_ESC         0x01
 #define KEY_OEM6        0x0D
 #define KEY_OEM1        0x1B
-#define KEY_BACKSPACE   0x0E
 #define KEY_TAB         0x0F
 #define KEY_LCTRL       0x1D
 #define KEY_OEM3        0x27
@@ -29,7 +31,7 @@
 #define KEY_PRT_SC      0x54
 #define KEY_F11         0x57
 #define KEY_F12         0x58
-
+*/
 
 typedef struct {
     uint8_t key;
