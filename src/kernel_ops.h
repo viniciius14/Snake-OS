@@ -3,6 +3,8 @@
 
 #include "utils.h"
 
+#define BLANK   (0x20 | ((0 << 4) | (15 & 0x0F) << 8))
+
 void move_cursor(void);
 void scroll(void);
 void k_put_c(char c);

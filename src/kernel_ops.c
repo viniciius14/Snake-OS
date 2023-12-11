@@ -1,5 +1,7 @@
 #include "kernel_ops.h"
 
+
+
 uint16_t *video_memory = (uint16_t *)0xB8000;
 
 uint8_t cursor_x = 0;
@@ -14,8 +16,6 @@ void move_cursor(void) {
 }
 
 void scroll(void) {
-    uint8_t attributeByte = (0 << 4) | (15 & 0x0F);
-    uint16_t blank = 0x20 | (attributeByte << 8);
 
     if (cursor_y >= 25) {
         int i;
@@ -23,12 +23,16 @@ void scroll(void) {
             video_memory[i] = video_memory[i+80];
         }
         for (i = (24 * 80) ; i < (25 * 80) ; i++) {
-            video_memory[i] = blank;
+            video_memory[i] = BLANK;
         }
         cursor_y = 24;
     }
 }
 
+/*
+ This function doesn't support going back to the last character
+ after deleting a line beggining.
+*/
 void k_put_c(char c) {
     uint8_t backColour = BLACK_TXT;
     uint8_t foreColour = WHITE_TXT;
@@ -39,12 +43,20 @@ void k_put_c(char c) {
     uint16_t *location;
 
     /* If the character is a backspace go back 1 position */
-    if (c == 0x08 && cursor_x) {
+    if (c == 0x08) {
+        if (!cursor_x && cursor_y > 0) {
+            cursor_x = 80;
+            cursor_y--;
+        } else if (!cursor_x && !cursor_y) {
+            return;
+        }
+        cursor_x--;
+        k_put_c(' ');
         cursor_x--;
     }
-    /* If the character is a tab go to the next position divisible by 8 */
+    /* If the character is a tab go to the next position divisible by 4 */
     else if (c == 0x09) {
-        cursor_x = (cursor_x + 8) & ~(8-1);
+        cursor_x = (cursor_x + 4) & ~(4-1);
     }
     /* If character is a return reset position */
     else if (c == '\r') {
@@ -61,9 +73,8 @@ void k_put_c(char c) {
         *location = c | attribute;
         cursor_x++;
     }
-    
     /* Check if we need to write into a new line since screen boundary has been reached */
-    if (cursor_x >= 80) {
+    if (cursor_x > 80) {
         cursor_x = 0;
         cursor_y ++;
     }
