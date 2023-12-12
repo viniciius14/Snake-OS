@@ -1,7 +1,5 @@
 #include "kernel_ops.h"
 
-
-
 uint16_t *video_memory = (uint16_t *)0xB8000;
 
 uint8_t cursor_x = 0;
@@ -43,6 +41,7 @@ void k_put_c(char c) {
     uint16_t *location;
 
     /* If the character is a backspace go back 1 position */
+    /* NOTE: this could be done better but for my purposes it'll work */
     if (c == 0x08) {
         if (!cursor_x && cursor_y > 0) {
             cursor_x = 80;
@@ -161,59 +160,24 @@ void k_print_dec(uint32_t n) {
     k_print(c2);
 }
 
-void k_panic(const char *message, const char* code, bool halt) {
+void k_panic(const char *message, bool halt) {
     k_clear();
-
-    k_print("SYSTEM ERROR\n");
+    /* Hacky way of semi centering this message */
+    k_print("\t\t\t\t\t\t\t\t SYSTEM ERROR\n");
     k_print("Exception has ocurred.\n");
 
     k_print("Message: ");
     k_print(message);
-    k_print("Code: ");
-    k_print(code);
+
 
     if(halt) {
         //CTX_DMP(); // TBD implement
-        k_print("\n\n\nFATAL\n\n\n");
+        k_print("\n\n\nFATAL");
         __asm__ __volatile__("cli");
-        __asm__ __volatile__("hlt");
+        while (1) {
+            __asm__ __volatile__("hlt");
+        }
     } else {
         k_print("\n\n\nNON FATAL\n\n\n");
     }
-}
-
-
-/* Sets n bytes of memory to value starting at address dst */
-void memset(void *dst, uint8_t value, size_t n) {
-    uint8_t *d = dst;
-    while (n-- > 0) {
-        *(d++) = value;
-    }
-}
-
-/* Copies n bytes of memory from src to dst */
-void *memcpy(void *dst, const void *src, size_t n) {
-    uint8_t *d = dst;
-    const uint8_t *s = src;
-
-    while (n-- > 0) {
-        *(d++) = *(s++);
-    }
-    return dst;
-}
-
-/* Moves n bytes from src to dst */
-void *memmove(void *dst, const void *src, size_t n) {
-    if (src > dst) {
-        return memcpy(dst, src, n);
-    }
-
-    uint8_t *d = dst;
-    const uint8_t *s = src;
-
-    for (size_t i = n ; i > 0 ; i--) {
-        d[i - 1] = s[i - 1];
-    }
-
-    return dst;
 }

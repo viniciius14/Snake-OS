@@ -64,6 +64,15 @@ typedef char                color;
 /* First C function that's ran */
 void kernel_main(void);
 
+/* Sets n bytes of memory to value starting at address dst */
+void  memset(void *dst, uint8_t value, size_t n);
+
+/* Copies n bytes of memory from src to dst */
+void  *memcpy(void *dst, const void *src, size_t n);
+
+/* Moves n bytes from src to dst */
+void  *memmove(void *dst, const void *src, size_t n);
+
 /* Outputs a byte to the specified hardware port */
 void outb(uint32_t, uint8_t);
 

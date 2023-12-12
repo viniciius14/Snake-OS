@@ -24,9 +24,15 @@ _start:
     mov dl, [BOOT_DISK]
     int 0x13
 
-    mov ah, 0x0             ; clear the screen
-    mov al, 0x3             ; by switching to
-    int 0x10                ; text mode
+    ; Switches to text mode and as a result clears the screen
+    ; mov ah, 0x0
+    ; mov al, 0x3
+    ; int 0x10
+
+    ; Switches to graphics mode 0x13 -> Resolution: 320 x 200 | Adapter: EGA | Colors: 16 bit
+    mov ah, 0x0
+    mov al, 0x13
+    int 0x10
 
     CODE_SEG equ code_descriptor - GDT_Start
     DATA_SEG equ data_descriptor - GDT_Start

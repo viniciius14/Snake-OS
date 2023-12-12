@@ -1,5 +1,7 @@
 #include "keyboard.h"
 
+uint8_t key;
+
 uint8_t keyboard_layout_pt[58] = {
     KEY_NULL, KEY_NULL, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
     KEY_NULL, KEY_NULL, KEY_BACKSPACE, KEY_TAB,
@@ -25,14 +27,11 @@ void keyboard_handler(int_frame_32_t *frame) {
     (void)frame;
 
     /* Get scan code that was sent to the port */
-    uint8_t key = inb(0x60);
+    key = inb(0x60);
     if (!(key & 0x80)) {
-        // k_print_hex(key);
-        // k_print(" : ");
         /* Convert value to corresponding keyboard key */
         key = key > 0x39 ? keyboard_layout_pt[0] : keyboard_layout_pt[key];
-        k_print((char *)&key);
-        // k_put_c('\n');
+        k_print((char *)&key); // TODO remove this line
     }
 
     send_pic_eoi(1);
