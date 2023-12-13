@@ -1,6 +1,6 @@
 #include "kernel_ops.h"
 
-uint16_t *video_memory = (uint16_t *)0xB8000;
+uint16_t *txt_video_memory = (uint16_t *)0xB8000;
 
 uint8_t cursor_x = 0;
 uint8_t cursor_y = 0;
@@ -18,10 +18,10 @@ void scroll(void) {
     if (cursor_y >= 25) {
         int i;
         for (i = (0 * 80) ; i < (24 * 80) ; i++) {
-            video_memory[i] = video_memory[i+80];
+            txt_video_memory[i] = txt_video_memory[i+80];
         }
         for (i = (24 * 80) ; i < (25 * 80) ; i++) {
-            video_memory[i] = BLANK;
+            txt_video_memory[i] = BLANK;
         }
         cursor_y = 24;
     }
@@ -68,7 +68,7 @@ void k_put_c(char c) {
     }
     /* Handle any other printable character */
     else if(c >= ' ') {
-        location = video_memory + (cursor_y * 80 + cursor_x);
+        location = txt_video_memory + (cursor_y * 80 + cursor_x);
         *location = c | attribute;
         cursor_x++;
     }
@@ -87,7 +87,7 @@ void k_clear(void) {
 
     uint32_t i;
     for (i = 0; i < (80 * 25) ; i++) {
-        video_memory[i] = blank;
+        txt_video_memory[i] = blank;
     }
     cursor_x = 0;
     cursor_y = 0;

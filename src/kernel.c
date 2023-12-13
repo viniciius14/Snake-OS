@@ -7,6 +7,9 @@
 #include "keyboard.h"
 #include "screen.h"
 
+extern uint8_t *video_memory;
+extern uint32_t tick;
+
 void kernel_main(void) {
     k_print("Test\n");
 
@@ -29,6 +32,12 @@ void kernel_main(void) {
     init_keyboard();
 
     init_screen();
+
+    while(true) {
+        for(size_t i = 0; i < 200 ; i++) {
+            memset(video_memory + (i * SCREEN_WIDTH), (tick + i % 256), SCREEN_WIDTH);
+        }
+    }
 
 
     for (;;) {}

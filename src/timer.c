@@ -20,7 +20,7 @@ INTERRUPT void timer_handler(int_frame_32_t *frame) {
 
 void sleep(uint16_t time) {
     uint32_t curr = tick;
-    while (tick < (curr + time)) {
+    while (tick <= (curr + time)) {
         /* Do nothing */
     }
 }
