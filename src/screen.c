@@ -19,7 +19,10 @@ void init_screen() {
     outb(PALETTE_DATA, 0x3F);
 }
 
+void screen_clear(uint8_t color) {
+    memset(video_memory, color, SCREEN_SIZE);
+}
 
 void draw_pixel(uint8_t x, uint8_t y, uint8_t color) {
-    video_memory[x + (y * 320)] = color;
+    video_memory[x + (y * SCREEN_WIDTH)] = color;
 }

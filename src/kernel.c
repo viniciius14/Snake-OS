@@ -6,6 +6,7 @@
 #include "timer.h"
 #include "keyboard.h"
 #include "screen.h"
+#include "font.h"
 
 extern uint8_t *video_memory;
 extern uint32_t tick;
@@ -33,12 +34,8 @@ void kernel_main(void) {
 
     init_screen();
 
-    while(true) {
-        for(size_t i = 0; i < 200 ; i++) {
-            memset(video_memory + (i * SCREEN_WIDTH), (tick + i % 256), SCREEN_WIDTH);
-        }
-    }
 
+    print_string("Hello World!", 1, 1, 255);
 
     for (;;) {}
 }
