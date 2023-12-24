@@ -148,8 +148,33 @@ void print_char(char c, uint32_t x, uint32_t y, uint8_t color) {
 void print_string(char *s, uint32_t x, uint32_t y, uint8_t color) {
     char c;
 
-    while ((c = *s++) != 0) {
+    while ((c = *s++) != '\0') {
         print_char(c, x, y, color);
         x += 8;
     }
+}
+
+void int_to_string(uint16_t value, char* buffer) {
+    // Maximum number of digits in a uint16_t is 5 (65535)
+    int i = 4;  // Start from the end of the buffer
+
+    // Handle the case when the value is 0 separately
+    if (value == 0) {
+        buffer[i] = '0';
+        i--;
+    } else {
+        while (value > 0) {
+            buffer[i] = '0' + (value % 10);
+            value /= 10;
+            i--;
+        }
+    }
+
+    // Move the characters to the beginning of the buffer
+    for (int j = i + 1; j < 5; j++) {
+        buffer[j - i - 1] = buffer[j];
+    }
+
+    // Null-terminate the string
+    buffer[5 - i - 1] = '\0';
 }

@@ -23,6 +23,6 @@ void screen_clear(uint8_t color) {
     memset(video_memory, color, SCREEN_SIZE);
 }
 
-void draw_pixel(uint8_t x, uint8_t y, uint8_t color) {
+void draw_pixel(uint16_t x, uint16_t y, uint8_t color) {
     video_memory[x + (y * SCREEN_WIDTH)] = color;
 }

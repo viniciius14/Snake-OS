@@ -7,13 +7,12 @@
 #include "keyboard.h"
 #include "screen.h"
 #include "font.h"
+#include "snake.h"
 
 extern uint8_t *video_memory;
 extern uint32_t tick;
 
 void kernel_main(void) {
-    k_print("Test\n");
-
     /* Setup interrups */
     init_idt();
 
@@ -24,7 +23,6 @@ void kernel_main(void) {
     disable_pic();
     /* Remap PIC */
     remap_pic();
-    __asm__ __volatile__ ("sti");
 
     /* Add PIC IRQ0 handler */
     init_timer();
@@ -34,8 +32,14 @@ void kernel_main(void) {
 
     init_screen();
 
+    // memset(video_memory, 255, 320 * 200 - 1);
 
-    print_string("Hello World!", 1, 1, 255);
+
+    // for(uint32_t i = 0 ; i != SCREEN_WIDTH * 3 ; i++) {
+    //     draw_pixel(i - 320  * i % SCREEN_HEIGHT, i % SCREEN_HEIGHT, 255);
+    // }
+    game_init();
+    
 
     for (;;) {}
 }

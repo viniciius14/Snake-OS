@@ -82,4 +82,6 @@ void remap_pic(void) {
     /* Write initial masks */
     outb(PIC_1_DATA, pic_1_mask);
     outb(PIC_2_DATA, pic_2_mask);
+
+    STI();
 }
