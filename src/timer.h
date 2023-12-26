@@ -15,4 +15,7 @@ INTERRUPT void timer_handler(int_frame_32_t *);
 /* Sleep for N ticks */
 void sleep(uint16_t);
 
+/* Generate a pseudo-random number */
+uint32_t rand(void);
+
 #endif /* TIMER_H */

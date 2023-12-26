@@ -26,3 +26,7 @@ void screen_clear(uint8_t color) {
 void draw_pixel(uint16_t x, uint16_t y, uint8_t color) {
     video_memory[x + (y * SCREEN_WIDTH)] = color;
 }
+
+void draw_popup(const char *msg, uint8_t color) {
+
+}

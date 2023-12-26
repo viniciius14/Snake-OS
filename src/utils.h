@@ -9,22 +9,7 @@
 #define SUCCESS             1
 #define FAIL                0
 
-#define BLACK_TXT           0x00
-#define BLUE_TXT            0x01
-#define GREEN_TXT           0x02
-#define CYAN_TXT            0x03
-#define RED_TXT             0x04
-#define MAGENTA_TXT         0x05
-#define BROWN_TXT           0x06
-#define LIGHT_GRAY_TXT      0x07
-#define DARK_GRAY_TXT       0x08
-#define LIGHT_BLUE_TXT      0x09
-#define LIGHT_GREEN_TXT     0x0A
-#define LIGHT_CYAN_TXT      0x0B
-#define LIGHT_RED_TXT       0x0C
-#define LIGHT_MAGENTA_TXT   0x0D
-#define YELLOW_TXT          0x0E
-#define WHITE_TXT           0x0F
+
 
 #define PACKED              __attribute__((packed))
 #define INTERRUPT           __attribute__((interrupt))
@@ -35,6 +20,9 @@
 
 #define STI()               __asm__ __volatile__("sti")
 #define CLI()               __asm__ __volatile__("cli")
+
+#define MIN(_x, _y) _x < _y ? _x : _y;
+
 
 /* ---------- Typedef's ---------- */
 
