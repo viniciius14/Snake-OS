@@ -5,6 +5,10 @@
 #include "screen.h"
 #include "font.h"
 
+#define HORZ_SQUARES 20
+#define VERT_SQUARES 15
+
+
 /*
 - Draw background
     - Checkers 20 * 15
@@ -12,9 +16,9 @@
 SCORE           BEST
 |   |   |   |   |...|
 
-- Draw score and best 
+- Draw score and best
 
-- Initial snake is 3 "blocks" long 
+- Initial snake is 3 "blocks" long
 */
 
 void game_init(void);

@@ -11,17 +11,9 @@ void game_init(void) {
     score = 0, best = 0;
     board_init();
 
-    //draw board / backgound
-    for(uint32_t x = 0 ; x != SCREEN_WIDTH ; x++ ) {
-        for(uint32_t y = 16 ; y != SCREEN_HEIGHT; y++ ) {
-            if ((x % 14 == 0 || y % 14 == 0) && y > 27 && x < 309 && y < 197) {
-                draw_pixel(x + 5, y, VC_WHITE);
-            }
-        }
-
-    }
-
 }
+
+
 /*
 4
 8
@@ -37,6 +29,22 @@ void board_init(void) {
     int_to_string(best, str);
     print_string("Best:", 250,  4, VC_WHITE);
     print_string(str, 292 , 4, VC_WHITE);
+
+
+    uint32_t y_border_s = 16;
+    uint32_t square_size = SCREEN_WIDTH / HORZ_SQUARES < (SCREEN_HEIGHT - y_border_s) / VERT_SQUARES
+                        ? SCREEN_WIDTH / HORZ_SQUARES : (SCREEN_HEIGHT - y_border_s) / VERT_SQUARES;
+
+    uint32_t x_border = ((SCREEN_WIDTH - (square_size * HORZ_SQUARES)) / 2);
+    uint32_t y_border_e = (y_border_s + (VERT_SQUARES * square_size));
+
+    for (uint32_t y = y_border_s ; y <= y_border_e ; y++) {
+        for (uint32_t x = x_border ; x <= SCREEN_WIDTH - x_border ; x++) {
+            if ((x - x_border) % square_size == 0 || (y - y_border_s) % square_size == 0) {
+                draw_pixel(x , y, VC_WHITE);
+            }
+        }
+    }
 }
 
 void update_board(void) {

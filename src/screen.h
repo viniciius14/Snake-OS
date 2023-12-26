@@ -4,8 +4,10 @@
 #include "utils.h"
 #include "timer.h"
 
+/* Ideally this dimenstions wouldn't be hardcoded */
 #define SCREEN_WIDTH    320
 #define SCREEN_HEIGHT   200
+
 #define SCREEN_SIZE     (SCREEN_WIDTH * SCREEN_HEIGHT)
 #define SCREEN_PITCH    320
 
