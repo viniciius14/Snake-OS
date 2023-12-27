@@ -3,8 +3,8 @@
 
 /* Not checking for an overflow on the tick variable because for the
 current ~18 ticks/s you would need to be with this on for 66k+ hours */
-uint32_t tick;
-static uint32_t seed = 23;
+volatile uint32_t tick;
+static uint32_t seed = 12;
 
 void init_timer(void) {
     idt_set_descriptor(32, timer_handler, INT_GATE_FLAGS);
@@ -23,10 +23,12 @@ void sleep(uint16_t time) {
     uint32_t curr = tick;
     while (tick <= (curr + time)) {
         /* Do nothing */
+        __asm__ __volatile__("nop");
     }
 }
 
 uint32_t rand(void) {
-    seed = seed * 1103515245 * tick + 12345;
-    return (seed / 65536) % (tick * seed);
+    uint32_t curr_tick = tick;
+    seed = seed * 1103515245 + curr_tick;
+    return (seed / 65536) % 9999;
 }

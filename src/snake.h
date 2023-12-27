@@ -24,10 +24,10 @@ struct Snake {
 void game_init(void);
 
 
-/* Responsible for updating the snake, score and apple */
+/* Responsible for updating the snake, score, apple and game status */
 void game_update(void);
 
-/* */
+/* Resets the game after winning/losing */
 void game_reset(void);
 
 /* */
@@ -48,8 +48,6 @@ void snake_update(void);
 /* */
 void snake_reset(void);
 
-/* */
-uint8_t game_status(void);
 
 
 

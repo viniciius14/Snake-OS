@@ -28,6 +28,7 @@ void keyboard_handler(int_frame_32_t *frame) {
 
     /* Get scan code that was sent to the port */
     key = inb(0x60);
+    /* Check if it's not a key release */
     if (!(key & 0x80)) {
         /* Convert value to corresponding keyboard key */
         key = key > 0x39 ? keyboard_layout_pt[0] : keyboard_layout_pt[key];

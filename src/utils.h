@@ -22,6 +22,7 @@
 #define CLI()               __asm__ __volatile__("cli")
 
 #define MIN(_x, _y) _x < _y ? _x : _y;
+#define MAX(_x, _y) _x > _y ? _x : _y;
 
 
 /* ---------- Typedef's ---------- */
