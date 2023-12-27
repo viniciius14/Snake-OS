@@ -3,6 +3,7 @@
 
 #include "utils.h"
 
+/* */
 void init_fpu(void);
 
 #endif /* FPU_H */

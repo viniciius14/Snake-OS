@@ -4,8 +4,8 @@
 #include "utils.h"
 #include "kernel_ops.h"
 
-#define TRAP_GATE_FLAGS 0x8F
-#define INT_GATE_FLAGS  0x8E
+#define TRAP_GATE_FLAGS     0x8F
+#define INT_GATE_FLAGS      0x8E
 
 /* Entry for the IDT (Interrupt Descriptor Table) */
 typedef struct {
@@ -31,15 +31,19 @@ typedef struct {
     uint32_t ss;
 } PACKED int_frame_32_t;
 
+/* */
+INTERRUPT void default_excp_handler(int_frame_32_t *);
 
-INTERRUPT void default_excp_handler(int_frame_32_t *int_frame_32);
+/* */
+INTERRUPT void default_excp_handler_err_code(int_frame_32_t *, uint32_t);
 
-INTERRUPT void default_excp_handler_err_code(int_frame_32_t *int_frame_32, uint32_t error_code);
+/* */
+INTERRUPT void default_int_handler(int_frame_32_t *);
 
-INTERRUPT void default_int_handler(int_frame_32_t *int_frame_32);
+/* */
+void idt_set_descriptor(uint8_t, void *, uint8_t);
 
-void idt_set_descriptor(uint8_t entry_number, void *isr, uint8_t flags);
-
+/* */
 void init_idt(void);
 
 

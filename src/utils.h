@@ -53,13 +53,13 @@ typedef char                color;
 void kernel_main(void);
 
 /* Sets n bytes of memory to value starting at address dst */
-void  memset(void *dst, uint8_t value, size_t n);
+void memset(void *, uint8_t, size_t);
 
 /* Copies n bytes of memory from src to dst */
-void  *memcpy(void *dst, const void *src, size_t n);
+void *memcpy(void *, const void *, size_t);
 
 /* Moves n bytes from src to dst */
-void  *memmove(void *dst, const void *src, size_t n);
+void *memmove(void *, const void *, size_t);
 
 /* Outputs a byte to the specified hardware port */
 void outb(uint32_t, uint8_t);

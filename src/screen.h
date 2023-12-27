@@ -25,12 +25,19 @@
 #define VC_L_GREY       0x6D
 #define VC_WHITE        0xFF
 
+/* */
 void init_screen(void);
+
+/* */
 // void screen_swap(void);
-void screen_clear(uint8_t color);
-void draw_pixel(uint16_t x, uint16_t y, uint8_t color);
+
+/* */
+void screen_clear(uint8_t);
+
+/* */
+void draw_pixel(uint16_t, uint16_t, uint8_t);
 
 /* Writes a popup to the screen and waits for any key to be pressed */
-void draw_popup(const char *msg, uint8_t color);
+void draw_popup(const char *, uint8_t);
 
 #endif /* SCREEN_H */

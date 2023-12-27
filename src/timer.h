@@ -7,6 +7,7 @@
 #include "kernel_ops.h"
 
 
+/* */
 void init_timer(void);
 
 /* PIT timer channel 0 PIC IRQ0 interrupt handler */

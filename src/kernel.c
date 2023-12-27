@@ -30,16 +30,10 @@ void kernel_main(void) {
     /* Add PIC IRQ1 handler */
     init_keyboard();
 
+    /* */
     init_screen();
 
-    // memset(video_memory, 255, 320 * 200 - 1);
-
-
-    // for(uint32_t i = 0 ; i != SCREEN_WIDTH * 3 ; i++) {
-    //     draw_pixel(i - 320  * i % SCREEN_HEIGHT, i % SCREEN_HEIGHT, 255);
-    // }
     game_init();
-    
 
     for (;;) {}
 }
