@@ -7,7 +7,7 @@
 
 #define PS2_DATA_PORT   0x60
 
-#define KEY_NULL        0xFF
+#define KEY_NULL        0x00
 #define KEY_ENTER       '\n'
 #define KEY_BACKSPACE   0x08
 #define KEY_TAB         0x09

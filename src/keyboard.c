@@ -16,6 +16,7 @@ uint8_t keyboard_layout_pt[58] = {
 
 void init_keyboard(void) {
     idt_set_descriptor(33, keyboard_handler, INT_GATE_FLAGS);
+
     /* Clear out keyboard buffer */
     while (inb(0x64) & 1) {
         inb(0x60);
@@ -27,12 +28,12 @@ void keyboard_handler(int_frame_32_t *frame) {
     (void)frame;
 
     /* Get scan code that was sent to the port */
-    key = inb(0x60);
+    uint8_t temp_key = inb(PS2_DATA_PORT);
+
     /* Check if it's not a key release */
-    if (!(key & 0x80)) {
+    if (!(temp_key & 0x80)) {
         /* Convert value to corresponding keyboard key */
-        key = key > 0x39 ? keyboard_layout_pt[0] : keyboard_layout_pt[key];
-        k_print((char *)&key); // TODO remove this line
+        key = temp_key > 0x39 ? keyboard_layout_pt[0] : keyboard_layout_pt[temp_key];
     }
 
     send_pic_eoi(1);
