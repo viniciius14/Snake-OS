@@ -10,7 +10,7 @@ This techically is a ring 0 tiny kernel but Snake-OS sounds better
 - Simple keyboard driver
 - Simple graphics driver
 
-#### Resources Used
+#### Resources
 - [osdev.org wiki](https://wiki.osdev.org/Main_Page)
 - [James Molloy's Kernel Development Tutorials](http://www.jamesmolloy.co.uk/tutorial_html/)
 - [osdever tutorials](http://www.osdever.net/tutorials/view/interrupts-exceptions-and-idts-part-1-interrupts-isrs-irqs-the-pic)
@@ -20,7 +20,13 @@ This techically is a ring 0 tiny kernel but Snake-OS sounds better
 ### Building & Running
 **NOTE**: This has only been tested with the QEMU emulator.
 
-To get all essential software run the SETUP.sh, if the script is not compatible with your Linux distro I'd suggest following the link in the file to check the other version of SETUP.sh.
+To get all essential software (like the cross compiler) run the SETUP.sh, if the script is not compatible with your Linux distro I'd suggest following the link in the file to check the other version of SETUP.sh.
+
+After having all the necessary tools installed simply do
+```
+$ cd src
+$ . run.sh
+```
 
 Running with WSL on Windows also works.
 
