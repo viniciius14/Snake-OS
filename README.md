@@ -7,6 +7,8 @@ This techically is a ring 0 tiny kernel but Snake-OS sounds better
 #### Features:
 - 32-bit (x86)
 - Fully custom bootloader
+- Simple keyboard driver
+- Simple graphics driver
 
 #### Resources Used
 - [osdev.org wiki](https://wiki.osdev.org/Main_Page)
