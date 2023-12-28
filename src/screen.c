@@ -7,7 +7,7 @@ void init_screen() {
     outb(PALETTE_MASK, 0xFF);
     outb(PALETTE_WRITE, 0);
 
-    for (uint8_t i = 0; i < 255; i++) {
+    for (uint8_t i = 0 ; i < 255 ; i++) {
         outb(PALETTE_DATA, (((i >> 5) & 0x07) * (256 / 8)) / 4);
         outb(PALETTE_DATA, (((i >> 2) & 0x07) * (256 / 8)) / 4);
         outb(PALETTE_DATA, (((i >> 0) & 0x03) * (256 / 4)) / 4);

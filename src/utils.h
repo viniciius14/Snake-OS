@@ -1,22 +1,10 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-/* ---------- Defines ---------- */
-
-#define true                1
-#define false               0
-
-#define SUCCESS             1
-#define FAIL                0
-
-
+/* ---------------- Defines ---------------- */
 
 #define PACKED              __attribute__((packed))
 #define INTERRUPT           __attribute__((interrupt))
-
-#define NULL                0
-
-#define CAT(x, y)           x##y
 
 #define STI()               __asm__ __volatile__("sti")
 #define CLI()               __asm__ __volatile__("cli")
@@ -25,8 +13,7 @@
 #define MIN(_x, _y)         (_x < _y ? _x : _y)
 #define MAX(_x, _y)         (_x > _y ? _x : _y)
 
-
-/* ---------- Typedef's ---------- */
+/* --------------- Typedef's --------------- */
 
 typedef unsigned char       uint8_t;
 typedef unsigned short      uint16_t;
@@ -38,16 +25,9 @@ typedef short int           int16_t;
 typedef int                 int32_t;
 typedef long long           int64_t;
 
-typedef float               float32_t;
-typedef double              float64_t;
-
 typedef uint32_t            uintptr_t;
 
-typedef uint32_t            size_t;
-
 typedef uint8_t             bool;
-
-typedef char                color;
 
 /* ---------- Function prototypes ---------- */
 
@@ -55,13 +35,13 @@ typedef char                color;
 void kernel_main(void);
 
 /* Sets n bytes of memory to value starting at address dst */
-void memset(void *, uint8_t, size_t);
+void memset(void *, uint8_t, uint32_t);
 
 /* Copies n bytes of memory from src to dst */
-void *memcpy(void *, const void *, size_t);
+void *memcpy(void *, const void *, uint32_t);
 
 /* Moves n bytes from src to dst */
-void *memmove(void *, const void *, size_t);
+void *memmove(void *, const void *, uint32_t);
 
 /* Outputs a byte to the specified hardware port */
 void outb(uint32_t, uint8_t);

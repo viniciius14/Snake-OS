@@ -4,6 +4,8 @@
 #include "utils.h"
 #include "timer.h"
 
+/* ---------------- Defines ---------------- */
+
 /* Ideally this dimenstions wouldn't be hardcoded */
 #define SCREEN_WIDTH    320
 #define SCREEN_HEIGHT   200
@@ -24,6 +26,8 @@
 #define VC_CYAN         0x1F
 #define VC_L_GREY       0x6D
 #define VC_WHITE        0xFF
+
+/* ---------- Function prototypes ---------- */
 
 /* */
 void init_screen(void);

@@ -1,7 +1,5 @@
 #include "pic.h"
 
-
-/* Send end of interrupt command to signal IRQ has been handled */
 void send_pic_eoi(uint8_t irq) {
     if (irq >= 8) {
         outb(PIC_2_CMD, PIC_EOI);
@@ -9,13 +7,11 @@ void send_pic_eoi(uint8_t irq) {
     outb(PIC_1_CMD, PIC_EOI);
 }
 
-/* Disable PIC */
 void disable_pic(void) {
     outb(PIC_2_DATA, 0xFF);
     outb(PIC_1_DATA, 0xFF);
 }
 
-/* Set IRQ mask by setting the bit in the IMR (interrupt mask register) */
 void set_irq_mask(uint8_t irq) {
     uint16_t port;
     uint8_t value;
@@ -30,8 +26,6 @@ void set_irq_mask(uint8_t irq) {
     outb(port, value);
 }
 
-
-/* Clear IRQ mask by clearing the bit in the IMR (interrupt mask register) */
 void clear_irq_mask(uint8_t irq) {
     uint16_t port;
     uint8_t value;
@@ -46,8 +40,6 @@ void clear_irq_mask(uint8_t irq) {
     outb(port, value);
 }
 
-
-/* Remap PIC to user interrupts above first 15, to not interface withe xceptions (ISRs 0-31) */
 void remap_pic(void) {
     uint8_t pic_1_mask, pic_2_mask;
 

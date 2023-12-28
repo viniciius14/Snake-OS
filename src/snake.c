@@ -17,8 +17,8 @@ void init_game(void) {
     score = 0, best = 0, game_status = 0;
 
     new_apple();
-    snake_init();
-    board_init();
+    init_snake();
+    init_board();
 
     /* Game loop */
     while (1) {
@@ -44,10 +44,14 @@ void init_game(void) {
             }
 
             if (score == 300) {
+                key = 0;
+                screen_clear(VC_BLACK);
+
                 print_string("You won!",128, 40, VC_RED);
                 print_string("Perhaps you should take a break...", 24, 60, VC_RED);
                 print_string("Press any key to play again.", 48, 80, VC_RED);
                 while (key == 0) {}
+
                 game_reset();
             }
 
@@ -81,10 +85,10 @@ void game_reset(void) {
     last_key = 'd';
 
     new_apple();
-    snake_init();
+    init_snake();
 }
 
-void board_init(void) {
+void init_board(void) {
     char str[5] = {0};
 
     print_string("Score: 0", 4, 4, VC_WHITE);
@@ -134,7 +138,7 @@ void new_apple(void) {
     }
 }
 
-void snake_init(void) {
+void init_snake(void) {
     /* Starting position of the snake */
     snake.body[0].x = 4;
     snake.body[0].y = 7;
@@ -183,7 +187,7 @@ void snake_update(void) {
     }
 
     /* Hacky way to force legal movements since it's not working in the switch? */
-    if(curr_key == 'w' && last_key == 's') {
+    if (curr_key == 'w' && last_key == 's') {
         curr_key = 's';
     } else if (curr_key == 'a' && last_key == 'd') {
         curr_key = 'd';
@@ -215,8 +219,6 @@ void snake_update(void) {
             snake.body[0].x++;
         }
         break;
-    case 'p':
-        return;
     default:
         return;
     }

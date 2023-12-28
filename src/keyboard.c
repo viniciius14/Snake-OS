@@ -24,7 +24,7 @@ void init_keyboard(void) {
     clear_irq_mask(1);
 }
 
-void keyboard_handler(int_frame_32_t *frame) {
+void keyboard_handler(struct interrupt_frame *frame) {
     (void)frame;
 
     /* Get scan code that was sent to the port */

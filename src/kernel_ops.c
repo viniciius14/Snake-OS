@@ -2,8 +2,8 @@
 
 uint16_t *txt_video_memory = (uint16_t *)0xB8000;
 
-uint8_t cursor_x = 0;
-uint8_t cursor_y = 0;
+static uint8_t cursor_x = 0;
+static uint8_t cursor_y = 0;
 
 void move_cursor(void) {
     uint16_t cursorPosition = cursor_y * 80 + cursor_x;
@@ -14,12 +14,13 @@ void move_cursor(void) {
 }
 
 void scroll(void) {
-
     if (cursor_y >= 25) {
         int i;
+
         for (i = (0 * 80) ; i < (24 * 80) ; i++) {
             txt_video_memory[i] = txt_video_memory[i+80];
         }
+
         for (i = (24 * 80) ; i < (25 * 80) ; i++) {
             txt_video_memory[i] = BLANK;
         }
@@ -27,10 +28,6 @@ void scroll(void) {
     }
 }
 
-/*
- This function doesn't support going back to the last character
- after deleting a line beggining.
-*/
 void k_put_c(char c) {
     uint8_t backColour = BLACK_TXT;
     uint8_t foreColour = WHITE_TXT;
@@ -67,7 +64,7 @@ void k_put_c(char c) {
         cursor_y++;
     }
     /* Handle any other printable character */
-    else if(c >= ' ') {
+    else if (c >= ' ') {
         location = txt_video_memory + (cursor_y * 80 + cursor_x);
         *location = c | attribute;
         cursor_x++;
@@ -86,7 +83,7 @@ void k_clear(void) {
     uint16_t blank = 0x20 | (attributeByte << 8);
 
     uint32_t i;
-    for (i = 0; i < (80 * 25) ; i++) {
+    for (i = 0 ; i < (80 * 25) ; i++) {
         txt_video_memory[i] = blank;
     }
     cursor_x = 0;
@@ -153,7 +150,7 @@ void k_print_dec(uint32_t n) {
     c[i] = 0;
     c2[i--] = 0;
 
-    while(i >= 0){
+    while (i >= 0) {
         c2[i--] = c[j++];
     }
 
@@ -171,7 +168,7 @@ void k_panic(const char *message, bool halt) {
     k_print(message);
 
 
-    if(halt) {
+    if (halt) {
         k_print("\n\n\nFATAL");
         CLI();
         while (1) {

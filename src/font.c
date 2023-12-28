@@ -1,6 +1,6 @@
 #include "font.h"
 
-// 8x8 font for ASCII 0..127
+/* 8x8 font for ASCII 0..127 */
 static const uint8_t font_table[128][8] = {
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},   // U+0000 (nul)
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},   // U+0001
@@ -132,12 +132,11 @@ static const uint8_t font_table[128][8] = {
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}    // U+007F
 };
 
-void print_char(char c, uint32_t x, uint32_t y, uint8_t color) {
-
+void print_char(char c, uint16_t x, uint16_t y, uint8_t color) {
     const uint8_t *character = font_table[(uint16_t) c];
 
-    for (size_t yy = 0; yy < 8; yy++) {
-        for (size_t xx = 0; xx < 8; xx++) {
+    for (uint16_t yy = 0 ; yy < 8 ; yy++) {
+        for (uint16_t xx = 0 ; xx < 8 ; xx++) {
             if (character[yy] & (1 << xx)) {
                 draw_pixel(x + xx, y + yy, color);
             }
@@ -145,7 +144,7 @@ void print_char(char c, uint32_t x, uint32_t y, uint8_t color) {
     }
 }
 
-void print_string(char *s, uint32_t x, uint32_t y, uint8_t color) {
+void print_string(char *s, uint16_t x, uint16_t y, uint8_t color) {
     char c;
 
     while ((c = *s++) != '\0') {
@@ -155,10 +154,10 @@ void print_string(char *s, uint32_t x, uint32_t y, uint8_t color) {
 }
 
 void int_to_string(uint16_t value, char* buffer) {
-    // Maximum number of digits in a uint16_t is 5 (65535)
-    int i = 4;  // Start from the end of the buffer
+    /* Maximum number of digits in a uint16_t is 5 (65535) */
+    int i = 4;  /* Start from the end of the buffer */
 
-    // Handle the case when the value is 0 separately
+    /* Handle the case when the value is 0 separately */
     if (value == 0) {
         buffer[i] = '0';
         i--;
@@ -170,11 +169,11 @@ void int_to_string(uint16_t value, char* buffer) {
         }
     }
 
-    // Move the characters to the beginning of the buffer
-    for (int j = i + 1; j < 5; j++) {
+    /* Move the characters to the beginning of the buffer */
+    for (int j = i + 1 ; j < 5 ; j++) {
         buffer[j - i - 1] = buffer[j];
     }
 
-    // Null-terminate the string
+    /* Null-terminate the string */
     buffer[5 - i - 1] = '\0';
 }
