@@ -11,6 +11,18 @@
 
 #define GAME_OVER       1
 
+#define FPS             15
+
+/* Y border is uneven that's why theres a Start and a End */
+#define Y_BORDER_S      16
+
+#define SQUARE_SIZE     MIN(SCREEN_WIDTH / HORZ_SQUARES, \
+                        (SCREEN_HEIGHT - Y_BORDER_S) / VERT_SQUARES)
+
+#define Y_BORDER_E      (Y_BORDER_S + (VERT_SQUARES * SQUARE_SIZE))
+#define X_BORDER        ((SCREEN_WIDTH - (SQUARE_SIZE * HORZ_SQUARES)) / 2)
+
+
 struct Position {
     uint8_t x;
     uint8_t y;
@@ -21,7 +33,7 @@ struct Snake {
 };
 
 /* Meant to be ran only once */
-void game_init(void);
+void init_game(void);
 
 
 /* Responsible for updating the snake, score, apple and game status */

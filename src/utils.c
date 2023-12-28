@@ -53,5 +53,5 @@ uint16_t inw(uint32_t port) {
 }
 
 void io_wait(void) {
-    __asm__ __volatile__ ("outb %%al, $0x80" : : "a"(0));
+    ASM ("outb %%al, $0x80" : : "a"(0));
 }

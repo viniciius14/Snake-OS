@@ -2,7 +2,6 @@
 #include "kernel_ops.h"
 #include "idt.h"
 #include "pic.h"
-#include "fpu.h"
 #include "timer.h"
 #include "keyboard.h"
 #include "screen.h"
@@ -10,14 +9,11 @@
 #include "snake.h"
 
 extern uint8_t *video_memory;
-extern uint32_t tick;
+extern uint32_t ticks;
 
 void kernel_main(void) {
     /* Setup interrups */
     init_idt();
-
-    /* Initialize floating point unit */
-    init_fpu();
 
     /* Mask off all hardware interrupts (disable PIC) */
     disable_pic();
@@ -30,10 +26,11 @@ void kernel_main(void) {
     /* Add PIC IRQ1 handler */
     init_keyboard();
 
-    /* */
+    /* Initialize the color palette */
     init_screen();
 
-    game_init();
+    /* Initialize the game and it's loop */
+    init_game();
 
     for (;;) {}
 }

@@ -57,7 +57,7 @@ void init_idt(void) {
         idt_set_descriptor(entry, default_int_handler, INT_GATE_FLAGS);
     }
 
-    __asm__ __volatile__ ("lidt %0" : : "memory"(idtr32));
+    ASM ("lidt %0" : : "memory"(idtr32));
 }
 
 

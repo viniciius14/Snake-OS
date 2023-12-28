@@ -1,9 +1,9 @@
 #include "timer.h"
 
 
-/* Not checking for an overflow on the tick variable because for the
+/* Not checking for an overflow on the ticks variable because for the
 current ~18 ticks/s you would need to be with this on for 66k+ hours */
-volatile uint32_t tick;
+volatile uint32_t ticks;
 static uint32_t seed = 12;
 
 void init_timer(void) {
@@ -15,20 +15,20 @@ void init_timer(void) {
 /* PIT timer channel 0 PIC IRQ0 interrupt handler */
 INTERRUPT void timer_handler(int_frame_32_t *frame) {
     (void)frame;
-    tick++;
+    ticks++;
     send_pic_eoi(0);
 }
 
 void sleep(uint16_t time) {
-    uint32_t curr = tick;
-    while (tick <= (curr + time)) {
+    uint32_t curr = ticks;
+    while (ticks <= (curr + time)) {
         /* Do nothing */
-        __asm__ __volatile__("nop");
+        ASM("nop");
     }
 }
 
 uint32_t rand(void) {
-    uint32_t curr_tick = tick;
+    uint32_t curr_tick = ticks;
     seed = seed * 1103515245 + curr_tick;
     return (seed / 65536) % 9999;
 }

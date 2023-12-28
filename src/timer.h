@@ -6,6 +6,7 @@
 #include "pic.h"
 #include "kernel_ops.h"
 
+#define TIMER_TPS   18
 
 /* */
 void init_timer(void);

@@ -162,6 +162,7 @@ void k_print_dec(uint32_t n) {
 
 void k_panic(const char *message, bool halt) {
     k_clear();
+
     /* Hacky way of semi centering this message */
     k_print("\t\t\t\t\t\t\t\t SYSTEM ERROR\n");
     k_print("Exception has ocurred.\n");
@@ -171,11 +172,10 @@ void k_panic(const char *message, bool halt) {
 
 
     if(halt) {
-        //CTX_DMP(); // TBD implement
         k_print("\n\n\nFATAL");
-        __asm__ __volatile__("cli");
+        CLI();
         while (1) {
-            __asm__ __volatile__("hlt");
+            ASM("hlt");
         }
     } else {
         k_print("\n\n\nNON FATAL\n\n\n");

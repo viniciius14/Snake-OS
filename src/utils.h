@@ -20,9 +20,10 @@
 
 #define STI()               __asm__ __volatile__("sti")
 #define CLI()               __asm__ __volatile__("cli")
+#define ASM(_op)            __asm__ __volatile__(_op)
 
-#define MIN(_x, _y) _x < _y ? _x : _y;
-#define MAX(_x, _y) _x > _y ? _x : _y;
+#define MIN(_x, _y)         (_x < _y ? _x : _y)
+#define MAX(_x, _y)         (_x > _y ? _x : _y)
 
 
 /* ---------- Typedef's ---------- */

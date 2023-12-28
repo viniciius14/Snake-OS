@@ -10,9 +10,6 @@
 
 #define SCREEN_SIZE     (SCREEN_WIDTH * SCREEN_HEIGHT)
 
-#define CURRENT         (v_buffer[buff_idx])
-#define SWAP()          (buff_idx = 1 - buff_idx)
-
 /* VGA control port addresses */
 #define PALETTE_MASK    0x3C6
 #define PALETTE_READ    0x3C7
@@ -32,18 +29,9 @@
 void init_screen(void);
 
 /* */
-void screen_swap(void);
-
-/* */
 void screen_clear(uint8_t);
 
 /* */
 void draw_pixel(uint16_t, uint16_t, uint8_t);
-
-/* Writes a popup to the screen and waits for any key to be pressed */
-void draw_popup(const char *, uint8_t);
-
-/* */
-void draw_to_buffer(uint16_t x, uint16_t y, uint8_t color);
 
 #endif /* SCREEN_H */

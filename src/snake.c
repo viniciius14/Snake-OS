@@ -1,6 +1,6 @@
 #include "snake.h"
 
-extern uint32_t tick;
+extern uint32_t ticks;
 extern uint8_t *video_memory;
 extern uint8_t key;
 
@@ -11,56 +11,45 @@ uint8_t last_key = 0;
 uint16_t best, score, snake_size = 2;
 bool game_status;
 
+void init_game(void) {
+    uint32_t last_frame = 0;
 
-/* temp funtion for debugging */
-void print_middle(const char * title, uint8_t num) {
-    char str[4] = {0};
-    uint8_t i = 0;
-    for(i = 0 ; title[i] != 0 ; i++);
-    int_to_string(num, str);
-    print_string(title, 100, 4, VC_WHITE);
-    print_string(str, 150 , 4, VC_WHITE);
-}
-
-void print_middle_c(const char * title, char c) {
-    uint8_t i = 0;
-    for(i = 0 ; title[i] != 0 ; i++);
-    print_string(title, 100, 4, VC_WHITE);
-    print_char(c, 150 , 4, VC_WHITE);
-}
-/*
-Current bugs and issues:
-    - Need to implement double buffering
-    - Need to implement the popups
-    - Would be nice for the snake head to either have more texture or be a different colour
-    - Would be nice to outline the snake
-    - Would be nice for background to be checkered
-*/
-
-
-void game_init(void) {
     score = 0, best = 0, game_status = 0;
+
     new_apple();
     snake_init();
     board_init();
 
     /* Game loop */
     while (1) {
-        if (game_status == GAME_OVER) {
-            if (score > best) {
-                draw_popup("New Highscore Achieved!\nPress any key to play again", VC_RED);
-            } else {
-                draw_popup("You lost.\nPress any key to play again", VC_RED);
+        const uint32_t now = ticks;
+
+        if ((now - last_frame) > (TIMER_TPS / FPS)) {
+            last_frame = now;
+
+            if (game_status == GAME_OVER) {
+                key = 0;
+
+                screen_clear(VC_BLACK);
+                if (score > best) {
+                    print_string("New Highscore Achieved!",68, 40, VC_RED);
+                    print_string("Press any key to play again.", 52, 60, VC_RED);
+                    while (key == 0) {}
+                } else {
+                    print_string("You lost.",128, 40, VC_RED);
+                    print_string("Press any key to play again.", 48, 60, VC_RED);
+                    while (key == 0) {}
+                }
+                game_reset();
             }
-            game_reset();
-        }
 
-        if (score == 300) {
-            draw_popup("Congrats u won!\nPress any key to play again", VC_RED);
-            game_reset();
-        }
+            if (score == 300) {
+                draw_popup("Congrats u won!\nPress any key to play again", VC_RED);
+                game_reset();
+            }
 
-        game_update();
+            game_update();
+        }
     }
 }
 
@@ -84,7 +73,9 @@ void game_update(void) {
 
 void game_reset(void) {
     best = MAX(best, score);
+
     score = 0, game_status = 0, key = 0, snake_size = 2;
+    last_key = 'd';
 
     new_apple();
     snake_init();
@@ -102,51 +93,43 @@ void board_init(void) {
 }
 
 void draw_board(void) {
-    /* TODO These could just be defines */
-    uint32_t y_border_s = 16;
-    uint32_t square_size = MIN(SCREEN_WIDTH / HORZ_SQUARES, (SCREEN_HEIGHT - y_border_s) / VERT_SQUARES)
-
-    uint32_t x_border = ((SCREEN_WIDTH - (square_size * HORZ_SQUARES)) / 2);
-    uint32_t y_border_e = (y_border_s + (VERT_SQUARES * square_size));
-
-    for (uint16_t y = y_border_s ; y <= y_border_e ; y++) {
-        for (uint16_t x = x_border ; x <= SCREEN_WIDTH - x_border ; x++) {
+    for (uint16_t y = Y_BORDER_S ; y <= Y_BORDER_E ; y++) {
+        for (uint16_t x = X_BORDER ; x <= SCREEN_WIDTH - X_BORDER ; x++) {
 
             /* Draw grid */
-            if ((x - x_border) % square_size == 0 || (y - y_border_s) % square_size == 0) {
+            if ((x - X_BORDER) % SQUARE_SIZE == 0 || (y - Y_BORDER_S) % SQUARE_SIZE == 0) {
                 draw_pixel(x , y, VC_WHITE);
                 continue;
             }
 
             /* Draw apple */
-            if (apple.x == (x - x_border) / square_size && apple.y == (y - y_border_s) / square_size) {
+            if (apple.x == (x - X_BORDER) / SQUARE_SIZE && apple.y == (y - Y_BORDER_S) / SQUARE_SIZE) {
                 draw_pixel(x , y, VC_RED);
                 continue;
             }
 
             /* Draw the snakes body */
             for (uint16_t snake_i = 0 ; snake.body[snake_i].x != 254 ; snake_i++) {
-                if (snake.body[snake_i].x == (x - x_border) / square_size && snake.body[snake_i].y == (y - y_border_s) / square_size) {
+                if (snake.body[snake_i].x == (x - X_BORDER) / SQUARE_SIZE &&
+                    snake.body[snake_i].y == (y - Y_BORDER_S) / SQUARE_SIZE) {
                     draw_pixel(x , y, VC_GREEN);
                 }
             }
         }
     }
-    sleep(1); /* TODO remove this */
 }
 
-/* TODO implement checking to spawn the apple not in the snakes body */
 void new_apple(void) {
     apple.x = rand() % HORZ_SQUARES;
     apple.y = rand() % VERT_SQUARES;
 
+    /* Check if the apple was spawned inside the snakes body */
     for (uint16_t i = 0 ; i != snake_size ; i++) {
         if (snake.body[i].x == apple.x && snake.body[i].y == apple.y) {
             new_apple();
         }
     }
 }
-
 
 void snake_init(void) {
     /* Starting position of the snake */
@@ -166,13 +149,11 @@ void snake_init(void) {
     }
 }
 
-/* Updates the coords of the snake's body and makes the snake bigger if an apple is eaten */
-/* also calls new_apple*/
 void snake_update(void) {
     uint8_t curr_key = key;
     struct Position old = snake.body[0];
 
-    /* If no key has been pressed yet, go foward */
+    /* If no key has been pressed yet, go to the right */
     curr_key = curr_key == 0 ? 'd' : curr_key;
 
     /* Check if the snake hit a wall */
@@ -198,7 +179,7 @@ void snake_update(void) {
         new_apple();
     }
 
-    /* Hacky way to force legal movements since it's not working in the switch*/
+    /* Hacky way to force legal movements since it's not working in the switch? */
     if(curr_key == 'w' && last_key == 's') {
         curr_key = 's';
     } else if (curr_key == 'a' && last_key == 'd') {
