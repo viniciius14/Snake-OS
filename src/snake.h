@@ -45,5 +45,4 @@ void snake_init(void);
 /* Updates the coords of the snake's body and makes the snake bigger if an apple is eaten */
 void snake_update(void);
 
-
 #endif /* SNAKE_H */

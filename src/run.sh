@@ -6,6 +6,9 @@ gcc_flags="-Wall -Wextra -m32 -nostdlib -fno-builtin -mgeneral-regs-only"
 # Create an array to store the list of .o files
 object_files=()
 
+# Create the bin dir if it doesn't exist
+mkdir -p "$bin_dir"/
+
 # Clear bin folder
 rm -f "$bin_dir"/*.bin
 rm -f "$bin_dir"/*.o

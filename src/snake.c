@@ -7,7 +7,8 @@ extern uint8_t key;
 struct Snake snake;
 struct Position apple;
 
-uint16_t best, score, snake_size = 2, last_key;
+uint8_t last_key = 0;
+uint16_t best, score, snake_size = 2;
 bool game_status;
 
 
@@ -21,13 +22,19 @@ void print_middle(const char * title, uint8_t num) {
     print_string(str, 150 , 4, VC_WHITE);
 }
 
+void print_middle_c(const char * title, char c) {
+    uint8_t i = 0;
+    for(i = 0 ; title[i] != 0 ; i++);
+    print_string(title, 100, 4, VC_WHITE);
+    print_char(c, 150 , 4, VC_WHITE);
+}
 /*
 Current bugs and issues:
-    - The snake can go through itself and do other weird "illegal" movements
-    - The snake "lags" behind when eating and apple
     - Need to implement double buffering
     - Need to implement the popups
     - Would be nice for the snake head to either have more texture or be a different colour
+    - Would be nice to outline the snake
+    - Would be nice for background to be checkered
 */
 
 
@@ -71,7 +78,6 @@ void game_update(void) {
     int_to_string(best, str);
     print_string("Best:", 250,  4, VC_WHITE);
     print_string(str, 292 , 4, VC_WHITE);
-    print_middle("lst k", last_key);
 
     draw_board();
 }
@@ -92,7 +98,6 @@ void board_init(void) {
     int_to_string(best, str);
     print_string("Best:", 250,  4, VC_WHITE);
     print_string(str, 292 , 4, VC_WHITE);
-
     draw_board();
 }
 
@@ -134,6 +139,12 @@ void draw_board(void) {
 void new_apple(void) {
     apple.x = rand() % HORZ_SQUARES;
     apple.y = rand() % VERT_SQUARES;
+
+    for (uint16_t i = 0 ; i != snake_size ; i++) {
+        if (snake.body[i].x == apple.x && snake.body[i].y == apple.y) {
+            new_apple();
+        }
+    }
 }
 
 
@@ -158,59 +169,80 @@ void snake_init(void) {
 /* Updates the coords of the snake's body and makes the snake bigger if an apple is eaten */
 /* also calls new_apple*/
 void snake_update(void) {
-    uint8_t cur_key = key;
+    uint8_t curr_key = key;
     struct Position old = snake.body[0];
 
-    /* Check if the snake hit a wall, special case when key == 0 for when the game start */
-    if ((snake.body[0].y == 0 && cur_key == 'w') ||
-        (snake.body[0].x == 0 && cur_key == 'a') ||
-        (snake.body[0].y == VERT_SQUARES - 1 && cur_key == 's') ||
-        (snake.body[0].x == HORZ_SQUARES - 1 && (cur_key == 'd' || cur_key == 0))) {
+    /* If no key has been pressed yet, go foward */
+    curr_key = curr_key == 0 ? 'd' : curr_key;
+
+    /* Check if the snake hit a wall */
+    if ((snake.body[0].y == 0 && curr_key == 'w') ||
+        (snake.body[0].x == 0 && curr_key == 'a') ||
+        (snake.body[0].y == VERT_SQUARES - 1 && curr_key == 's') ||
+        (snake.body[0].x == HORZ_SQUARES - 1 && curr_key == 'd')) {
             game_status = GAME_OVER;
             return;
     }
-    /* Check if snake ate an apple */
+
+    /* Check if the snake went into itself */
+    for (uint16_t i = 1 ; i != snake_size ; i++) {
+        if (snake.body[0].x == snake.body[i].x && snake.body[0].y == snake.body[i].y) {
+            game_status = GAME_OVER;
+            return;
+        }
+    }
+
+    /* Check if the snake ate an apple */
     if (snake.body[0].x == apple.x && snake.body[0].y == apple.y) {
         snake_size++, score++;
         new_apple();
     }
 
+    /* Hacky way to force legal movements since it's not working in the switch*/
+    if(curr_key == 'w' && last_key == 's') {
+        curr_key = 's';
+    } else if (curr_key == 'a' && last_key == 'd') {
+        curr_key = 'd';
+    } else if (curr_key == 's' && last_key == 'w') {
+        curr_key = 'w';
+    } else if (curr_key == 'd' && last_key == 'a') {
+        curr_key = 'a';
+    }
 
-    /* Loop through snake size*/
+    /* Update head direction */
+    switch (curr_key) {
+    case 'w':
+        if (snake.body[0].y > 0) {  /*  && last_key != 's' */
+            snake.body[0].y--;
+        }
+        break;
+    case 'a':
+        if (snake.body[0].x > 0) {  /* && last_key != 'd' */
+            snake.body[0].x--;
+        }
+        break;
+    case 's':
+        if (snake.body[0].y < VERT_SQUARES - 1) {   /*  && last_key != 'w' */
+            snake.body[0].y++;
+        }
+        break;
+    case 'd':
+        if (snake.body[0].x < HORZ_SQUARES - 1) {   /*  && last_key != 'a' */
+            snake.body[0].x++;
+        }
+        break;
+    case 'p':
+        return;
+    default:
+        return;
+    }
+
+    /* Update the snakes body */
     for (uint16_t i = 1 ; i != snake_size + 1 ; i++) {
         struct Position temp = snake.body[i];
         snake.body[i] = old;
         old = temp;
     }
 
-    /* If no key has been pressed yet, go foward */
-    cur_key = cur_key == 0 ? 'd' : cur_key;
-
-    /* Update head direction */
-    switch (cur_key) {
-    case 'w':
-        if (snake.body[0].y > 0 && last_key != 's') {
-            snake.body[0].y--;
-        }
-        break;
-    case 'a':
-        if (snake.body[0].x > 0 && last_key != 'd') {
-            snake.body[0].x--;
-        }
-        break;
-    case 's':
-        if (snake.body[0].y < VERT_SQUARES - 1 && last_key != 'w') {
-            snake.body[0].y++;
-        }
-        break;
-    case 'd':
-        if (snake.body[0].x < HORZ_SQUARES - 1 && last_key != 'a') {
-            snake.body[0].x++;
-        }
-        break;
-    default:
-        return;
-    }
-
-    last_key = cur_key;
+    last_key = curr_key;
 }
