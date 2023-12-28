@@ -33,7 +33,7 @@ void init_game(void) {
                 screen_clear(VC_BLACK);
                 if (score > best) {
                     print_string("New Highscore Achieved!",68, 40, VC_RED);
-                    print_string("Press any key to play again.", 52, 60, VC_RED);
+                    print_string("Press any key to play again.", 48, 60, VC_RED);
                     while (key == 0) {}
                 } else {
                     print_string("You lost.",128, 40, VC_RED);
@@ -44,7 +44,10 @@ void init_game(void) {
             }
 
             if (score == 300) {
-                draw_popup("Congrats u won!\nPress any key to play again", VC_RED);
+                print_string("You won!",128, 40, VC_RED);
+                print_string("Perhaps you should take a break...", 24, 60, VC_RED);
+                print_string("Press any key to play again.", 48, 80, VC_RED);
+                while (key == 0) {}
                 game_reset();
             }
 
